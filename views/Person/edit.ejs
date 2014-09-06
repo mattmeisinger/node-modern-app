@@ -1,0 +1,32 @@
+	<form action="/person/update/<%=person.id%>" method="POST" class="edit">
+	<div class="form-group">
+		<h2> editing a person... </h2>
+		<% if(flash && flash.err) { %>
+<ul class="alert alert-success">
+<% Object.keys(flash.err).forEach(function(error) { %>
+<li><%- JSON.stringify(flash.err[error]) %></li>
+<% }) %>
+</ul>
+<% } %>
+		
+	<div class="form-group" style="width: 400px;">
+	<label>name</label>
+	<input value="<%= person.name %>" name="name" type="text" class="form-control"/>
+	</div>
+
+	<div class="form-group" style="width: 400px;">
+	<label>name</label>
+	<input value="<%= person.email %>" name="email" type="text" class="form-control"/>
+	</div>
+
+	<div class="form-group" style="width: 400px;">
+	<label>name</label>
+	<input value="<%= person.phone %>" name="phone" type="text" class="form-control"/>
+	</div>
+
+		</div>
+		<input type="submit" value="Update Person" class="btn btn-default"/>
+		<a href="/person/show/<%=person.id %>" class="btn btn-danger">Cancel</a>
+	</form>
+	
+	

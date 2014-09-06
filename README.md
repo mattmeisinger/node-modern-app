@@ -1,4 +1,3 @@
-node-modern-app
-===============
+# crm
 
-Node.js application for Modern Internet App Dev course
+a [Sails](http://sailsjs.org) application
