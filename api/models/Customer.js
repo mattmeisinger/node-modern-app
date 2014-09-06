@@ -8,14 +8,13 @@
 module.exports = {
 
   attributes: {
-
     firstName : { type: 'string' },
-
     lastName : { type: 'string' },
-
     email : { type: 'email' },
-
-    phone : { type: 'string' }
+    phone : { type: 'string' },
+    agent : {
+      model: 'agent'
+    }
   }
 };
 
