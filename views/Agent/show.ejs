@@ -1,0 +1,29 @@
+<form class="show">
+	<div class="form-group">
+		<h2> a agent... </h2>
+		
+	<div class="form-group" style="width: 400px;">
+	<label>name</label>
+	<input value="<%= agent.firstName %>" name="firstName" type="text" class="form-control" disabled/>
+	</div>
+
+	<div class="form-group" style="width: 400px;">
+	<label>name</label>
+	<input value="<%= agent.lastName %>" name="lastName" type="text" class="form-control" disabled/>
+	</div>
+
+	<div class="form-group" style="width: 400px;">
+	<label>name</label>
+	<input value="<%= agent.email %>" name="email" type="text" class="form-control" disabled/>
+	</div>
+
+	<div class="form-group" style="width: 400px;">
+	<label>name</label>
+	<input value="<%= agent.phone %>" name="phone" type="text" class="form-control" disabled/>
+	</div>
+
+</div>
+</div>
+<a href="/agent/edit/<%=agent.id %>" class="btn btn-default">Edit</a> |
+<a href="/agent">Back to list</a>
+</form>

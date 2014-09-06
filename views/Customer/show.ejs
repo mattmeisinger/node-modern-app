@@ -1,0 +1,29 @@
+<form class="show">
+	<div class="form-group">
+		<h2> a customer... </h2>
+		
+	<div class="form-group" style="width: 400px;">
+	<label>name</label>
+	<input value="<%= customer.firstName %>" name="firstName" type="text" class="form-control" disabled/>
+	</div>
+
+	<div class="form-group" style="width: 400px;">
+	<label>name</label>
+	<input value="<%= customer.lastName %>" name="lastName" type="text" class="form-control" disabled/>
+	</div>
+
+	<div class="form-group" style="width: 400px;">
+	<label>name</label>
+	<input value="<%= customer.email %>" name="email" type="text" class="form-control" disabled/>
+	</div>
+
+	<div class="form-group" style="width: 400px;">
+	<label>name</label>
+	<input value="<%= customer.phone %>" name="phone" type="text" class="form-control" disabled/>
+	</div>
+
+</div>
+</div>
+<a href="/customer/edit/<%=customer.id %>" class="btn btn-default">Edit</a> |
+<a href="/customer">Back to list</a>
+</form>

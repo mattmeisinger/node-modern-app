@@ -1,0 +1,24 @@
+<form class="show">
+	<div class="form-group">
+		<h2> a contactHistory... </h2>
+		
+	<div class="form-group" style="width: 400px;">
+	<label>name</label>
+	<input value="<%= contactHistory.data %>" name="data" type="text" class="form-control" disabled/>
+	</div>
+
+	<div class="form-group" style="width: 400px;">
+	<label>name</label>
+	<input value="<%= contactHistory.model %>" name="model" type="text" class="form-control" disabled/>
+	</div>
+
+	<div class="form-group" style="width: 400px;">
+	<label>name</label>
+	<input value="<%= contactHistory.summary %>" name="summary" type="text" class="form-control" disabled/>
+	</div>
+
+</div>
+</div>
+<a href="/contactHistory/edit/<%=contactHistory.id %>" class="btn btn-default">Edit</a> |
+<a href="/contactHistory">Back to list</a>
+</form>
