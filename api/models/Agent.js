@@ -5,17 +5,23 @@
 * @docs        :: http://sailsjs.org/#!documentation/models
 */
 
+var Person = require('./Person'),
+    util   = require('util');
+
+function Agent() {
+  Person.apply(this, arguments);
+}
+
+util.inherits(Agent, Person);
+
 module.exports = {
 
   attributes: {
-    firstName : { type: 'string' },
-    lastName :  { type: 'string' },
-    email :     { type: 'email' },
-    phone :     { type: 'string' },
     customers : {
       collection: 'customer',
       via: 'agent'
     }
   }
+
 };
 
