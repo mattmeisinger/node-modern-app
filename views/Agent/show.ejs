@@ -1,7 +1,7 @@
 <form class="show">
-	<div class="form-group">
-		<h2> An agent... </h2>
-		
+  <div class="form-group">
+    <h2> An agent... </h2>
+
     <div class="form-group" style="width: 400px;">
       <label>First Name</label>
       <input value="<%= agent.firstName %>" name="firstName" type="text" class="form-control" disabled/>
@@ -24,7 +24,7 @@
 
     <div class="form-group" style="width: 400px;">
       <label>Customers</label>
-      <input value="Fill me real good" name="customers" type="text" class="form-control" disabled/>
+      <input value="<%= agent.customers %>" name="customers" type="text" class="form-control" disabled/>
     </div>
 
   </div>

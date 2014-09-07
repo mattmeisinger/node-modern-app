@@ -1,7 +1,7 @@
 <div class="container">
-	<h3>Agent Listing</h3>
+  <h3>Agent Listing</h3>
 
-	<table class='table table-hover table-condensed'>
+  <table class='table table-hover table-condensed'>
 
     <tr>
       <th> firstName </th>
@@ -17,13 +17,13 @@
 
     <% _.forEach(agents, function(agent) { %>
       <tr data-id="<%=agent.id %>" data-model="agent">
-      
-        <td><%= agent.firstName%></td>
-        <td><%= agent.lastName%></td>
-        <td><%= agent.email%></td>
-        <td><%= agent.phone%></td>
-        <td><%= agent.customers%></td>
-      
+
+        <td><%= agent.firstName %></td>
+        <td><%= agent.lastName %></td>
+        <td><%= agent.email %></td>
+        <td><%= agent.phone %></td>
+        <td><%= agent.customers %></td>
+
         <td><a href="/agent/show/<%=agent.id %>"  class="btn btn-primary btn-sm" role="button">Show</a></td>
         <td><a href="/agent/edit/<%=agent.id %>"  class="btn btn-primary btn-sm" role="button">Edit</a></td>
 
@@ -36,8 +36,8 @@
       </tr>
     <% }) %>
 
-	</table>
+  </table>
 
-	<a href="/agent/new/" class="btn btn-success btn-sm" role="button">New Agent</a> |
-	<a href="/">all scaffolds</a>
+  <a href="/agent/new/" class="btn btn-success btn-sm" role="button">New Agent</a> |
+  <a href="/">all scaffolds</a>
 </div>
