@@ -1,41 +1,43 @@
 <div class="container">
-	<h3>Customer Listing</h3>
-	<table class='table table-hover table-condensed'>
-	<tr>
+  <h3>Customer Listing</h3>
+  <table class='table table-hover table-condensed'>
+    <tr>
 
-	<th> firstName </th>
+      <th> firstName </th>
+      <th> lastName </th>
+      <th> email </th>
+      <th> phone </th>
+      <th> agent </th>
 
-	<th> lastName </th>
+      <th></th>
+      <th></th>
+      <th></th>
 
-	<th> email </th>
+    </tr>
 
-	<th> phone </th>
+    <% _.forEach(customers, function(customer) { %>
+      <tr data-id="<%=customer.id %>" data-model="customer">
 
-	<th></th>
-	<th></th>
-	<th></th>
-</tr>
-	<% _.forEach(customers, function(customer) { %>
-    		<tr data-id="<%=customer.id %>" data-model="customer">
-		
-			<td><%= customer.firstName%></td>
-		
-			<td><%= customer.lastName%></td>
-		
-			<td><%= customer.email%></td>
-		
-			<td><%= customer.phone%></td>
-		
-			<td><a href="/customer/show/<%=customer.id %>"  class="btn btn-primary btn-sm" role="button">Show</a></td>
-			<td><a href="/customer/edit/<%=customer.id %>"  class="btn btn-primary btn-sm" role="button">Edit</a></td>
+        <td><%= customer.firstName%></td>
+        <td><%= customer.lastName%></td>
+        <td><%= customer.email%></td>
+        <td><%= customer.phone%></td>
+        <td><%= customer.agent%></td>
 
-			<td><form action="/customer/destroy/<%=customer.id %>" method="POST">
-				<input type="hidden" name="_method" value="delete"/>
-				<input type="submit" value="Delete"  class="btn btn-danger btn-sm" role="button"/>
-			</form></td>
-		</tr>
-<% }) %>
-	</table>
-	<a href="/customer/new/" class="btn btn-success btn-sm" role="button">New Customer</a> |
-	<a href="/">all scaffolds</a>
+        <td><a href="/customer/show/<%=customer.id %>"  class="btn btn-primary btn-sm" role="button">Show</a></td>
+        <td><a href="/customer/edit/<%=customer.id %>"  class="btn btn-primary btn-sm" role="button">Edit</a></td>
+
+        <td>
+          <form action="/customer/destroy/<%=customer.id %>" method="POST">
+            <input type="hidden" name="_method" value="delete"/>
+            <input type="submit" value="Delete"  class="btn btn-danger btn-sm" role="button"/>
+         </form>
+       </td>
+      </tr>
+    <% }) %>
+  </table>
+
+  <a href="/customer/new/" class="btn btn-success btn-sm" role="button">New Customer</a> |
+  <a href="/">all scaffolds</a>
+
 </div>
