@@ -14,15 +14,11 @@ module.exports = {
   create: function(req, res) {
 
     var paramObj = {
-
       firstName: req.param('firstName'),
-
-      lastName: req.param('lastName'),
-
-      email: req.param('email'),
-
-      phone: req.param('phone'),
-
+      lastName:  req.param('lastName'),
+      email:     req.param('email'),
+      phone:     req.param('phone'),
+      agent:     req.param('agent')
     }
 
     // Create a User with the params sent from 
@@ -80,15 +76,11 @@ module.exports = {
   update: function(req, res, next) {
 
     var paramObj = {
-
       firstName: req.param('firstName'),
-
-      lastName: req.param('lastName'),
-
-      email: req.param('email'),
-
-      phone: req.param('phone'),
-
+      lastName:  req.param('lastName'),
+      email:     req.param('email'),
+      phone:     req.param('phone'),
+      agent:     req.param('agent')
     }
 
     Customer.update(req.param('id'), paramObj, function customerUpdated(err) {

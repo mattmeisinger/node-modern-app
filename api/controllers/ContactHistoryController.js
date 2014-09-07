@@ -6,24 +6,21 @@
  */
 
 module.exports = {
-	
+
   'new': function(req,res){
-    res.view();    
+    res.view();
   },
 
   create: function(req, res) {
 
     var paramObj = {
-
-      data: req.param('data'),
-
-      model: req.param('model'),
-
-      summary: req.param('summary'),
-
+      data:     req.param('data'),
+      model:    req.param('model'),
+      summary:  req.param('summary'),
+      customer: req.param('customer')
     }
 
-    // Create a User with the params sent from 
+    // Create a User with the params sent from
     // the sign-up form --> new.ejs
     ContactHistory.create(paramObj, function contactHistoryCreated(err, contactHistory) {
 
@@ -56,7 +53,7 @@ module.exports = {
   index: function(req, res, next) {
     ContactHistory.find(function foundContactHistorys(err, contactHistorys) {
       if (err) return next(err);
-      
+
       res.view({
         contactHistorys: contactHistorys
       });
@@ -78,13 +75,10 @@ module.exports = {
   update: function(req, res, next) {
 
     var paramObj = {
-
       data: req.param('data'),
-
       model: req.param('model'),
-
       summary: req.param('summary'),
-
+      customer: req.param('customer')
     }
 
     ContactHistory.update(req.param('id'), paramObj, function contactHistoryUpdated(err) {
@@ -111,13 +105,12 @@ module.exports = {
 
       ContactHistory.destroy(req.param('id'), function contactHistoryDestroyed(err) {
         if (err) return next(err);
-    });        
+    });
 
       res.redirect('/contactHistory');
 
     });
   }
- 
 
 };
 

@@ -6,9 +6,9 @@
  */
 
 module.exports = {
-	
+
   'new': function(req,res){
-    res.view();    
+    res.view();
   },
 
   create: function(req, res) {
@@ -18,9 +18,10 @@ module.exports = {
       lastName:  req.param('lastName'),
       email:     req.param('email'),
       phone:     req.param('phone'),
+      customers: req.param('customers')
     }
 
-    // Create a User with the params sent from 
+    // Create a User with the params sent from
     // the sign-up form --> new.ejs
     Agent.create(paramObj, function agentCreated(err, agent) {
 
@@ -56,7 +57,7 @@ module.exports = {
       .populate('customers')
       .exec(function (err, agents) {
       if (err) return next(err);
-      
+
       res.view({
         agents: agents
       });
@@ -83,7 +84,8 @@ module.exports = {
       firstName: req.param('firstName'),
       lastName:  req.param('lastName'),
       email:     req.param('email'),
-      phone:     req.param('phone')
+      phone:     req.param('phone'),
+      customers: req.param('customers')
     }
 
     Agent.update(req.param('id'), paramObj, function agentUpdated(err) {
@@ -108,7 +110,7 @@ module.exports = {
 
       Agent.destroy(req.param('id'), function agentDestroyed(err) {
         if (err) return next(err);
-      });        
+      });
 
       res.redirect('/agent');
     });
