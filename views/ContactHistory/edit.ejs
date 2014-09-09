@@ -1,32 +1,40 @@
-	<form action="/contactHistory/update/<%=contactHistory.id%>" method="POST" class="edit">
-	<div class="form-group">
-		<h2> editing a contactHistory... </h2>
-		<% if(flash && flash.err) { %>
-<ul class="alert alert-success">
-<% Object.keys(flash.err).forEach(function(error) { %>
-<li><%- JSON.stringify(flash.err[error]) %></li>
-<% }) %>
-</ul>
-<% } %>
-		
-	<div class="form-group" style="width: 400px;">
-	<label>name</label>
-	<input value="<%= contactHistory.data %>" name="data" type="text" class="form-control"/>
-	</div>
+<form action="/contactHistory/update/<%=contactHistory.id%>" method="POST" class="edit">
+  <div class="form-group">
+    <h2> editing a contactHistory... </h2>
 
-	<div class="form-group" style="width: 400px;">
-	<label>name</label>
-	<input value="<%= contactHistory.model %>" name="model" type="text" class="form-control"/>
-	</div>
+    <% if(flash && flash.err) { %>
+      <ul class="alert alert-success">
+        <% Object.keys(flash.err).forEach(function(error) { %>
+          <li><%- JSON.stringify(flash.err[error]) %></li>
+        <% }) %>
+      </ul>
+    <% } %>
 
-	<div class="form-group" style="width: 400px;">
-	<label>name</label>
-	<input value="<%= contactHistory.summary %>" name="summary" type="text" class="form-control"/>
-	</div>
+    <div class="form-group" style="width: 400px;">
+      <label>data</label>
+      <input value="<%= contactHistory.data %>" name="data" type="text" class="form-control"/>
+    </div>
 
-		</div>
-		<input type="submit" value="Update ContactHistory" class="btn btn-default"/>
-		<a href="/contactHistory/show/<%=contactHistory.id %>" class="btn btn-danger">Cancel</a>
-	</form>
-	
-	
+    <div class="form-group" style="width: 400px;">
+      <label>model</label>
+      <input value="<%= contactHistory.model %>" name="model" type="text" class="form-control"/>
+    </div>
+
+    <div class="form-group" style="width: 400px;">
+      <label>summary</label>
+      <input value="<%= contactHistory.summary %>" name="summary" type="text" class="form-control"/>
+    </div>
+
+    <div class="form-group" style="width: 400px;">
+      <label>customer</label>
+      <input value="<%= contactHistory.customer %>" name="customer" type="text" class="form-control"/>
+    </div>
+
+  </div>
+
+  <input type="submit" value="Update ContactHistory" class="btn btn-default"/>
+  <a href="/contactHistory/show/<%=contactHistory.id %>" class="btn btn-danger">Cancel</a>
+
+</form>
+
+

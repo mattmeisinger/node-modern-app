@@ -6,26 +6,22 @@
  */
 
 module.exports = {
-	
+
   'new': function(req,res){
-    res.view();    
+    res.view();
   },
 
   create: function(req, res) {
 
     var paramObj = {
-
       firstName: req.param('firstName'),
-
-      lastName: req.param('lastName'),
-
-      email: req.param('email'),
-
-      phone: req.param('phone'),
-
+      lastName:  req.param('lastName'),
+      email:     req.param('email'),
+      phone:     req.param('phone'),
+      customers: req.param('customers')
     }
 
-    // Create a User with the params sent from 
+    // Create a User with the params sent from
     // the sign-up form --> new.ejs
     Agent.create(paramObj, function agentCreated(err, agent) {
 
@@ -44,21 +40,24 @@ module.exports = {
   },
 
   show: function(req, res, next) {
-    Agent.findOne(req.param('id'), function foundAgent(err, agent) {
-      if (err) return next(err);
-      if (!agent) return next();
+    Agent.findOne(req.param('id'))
+      .populate('customers')
+      .exec(function(err, agent) {
+        if (err) return next(err);
+        if (!agent) return next();
 
-      // res.json(agent);
-      res.view({
-        agent: agent
-      });
+        res.view({
+          agent: agent
+        });
     });
   },
 
   index: function(req, res, next) {
-    Agent.find(function foundAgents(err, agents) {
+    Agent.find()
+      .populate('customers')
+      .exec(function (err, agents) {
       if (err) return next(err);
-      
+
       res.view({
         agents: agents
       });
@@ -66,10 +65,12 @@ module.exports = {
   },
 
   edit: function(req, res, next) {
-
-    Agent.findOne(req.param('id'), function foundAgent(err, agent) {
+    Agent.findOne(req.param('id'))
+      .populate('customers')
+      .exec(function(err, agent) {
       if (err) return next(err);
       if (!agent) return next('agent doesn\'t exist.');
+
 
       res.view({
         agent: agent
@@ -80,15 +81,11 @@ module.exports = {
   update: function(req, res, next) {
 
     var paramObj = {
-
       firstName: req.param('firstName'),
-
-      lastName: req.param('lastName'),
-
-      email: req.param('email'),
-
-      phone: req.param('phone'),
-
+      lastName:  req.param('lastName'),
+      email:     req.param('email'),
+      phone:     req.param('phone'),
+      customers: req.param('customers')
     }
 
     Agent.update(req.param('id'), paramObj, function agentUpdated(err) {
@@ -107,21 +104,16 @@ module.exports = {
   },
 
   destroy: function(req, res, next) {
-
     Agent.findOne(req.param('id'), function foundAgent(err, agent) {
       if (err) return next(err);
-
       if (!agent) return next('Agent doesn\'t exist.');
 
       Agent.destroy(req.param('id'), function agentDestroyed(err) {
         if (err) return next(err);
-    });        
+      });
 
       res.redirect('/agent');
-
     });
   }
- 
-
 };
 

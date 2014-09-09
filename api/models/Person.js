@@ -5,15 +5,16 @@
 * @docs        :: http://sailsjs.org/#!documentation/models
 */
 
-module.exports = {
+function Person() {
 
-  attributes: {
-
-    name : { type: 'string' },
-
-    email : { type: 'email' },
-
-    phone : { type: 'string' }
+  this.attributes = {
+    firstName : { type: 'string' },
+    lastName  : { type: 'string' },
+    email     : { type: 'email' },
+    phone     : { type: 'string' },
   }
-};
+
+}
+
+module.exports = Person;
 

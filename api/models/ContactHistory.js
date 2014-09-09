@@ -8,12 +8,11 @@
 module.exports = {
 
   attributes: {
-
-    data : { type: 'string' },
-
-    model : { type: 'string' },
-
-    summary : { type: 'string' }
+    data      : { type: 'string' },
+    model     : { type: 'string' },
+    summary   : { type: 'string' },
+    customer  : { model: 'customer' }
   }
+
 };
 
