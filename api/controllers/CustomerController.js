@@ -7,8 +7,14 @@
 
 module.exports = {
 	
-  'new': function(req,res){
-    res.view();    
+  'new': function(req, res) {
+    Agent.find().exec(function(err, agents) {
+      if (err) return next(err);
+
+      res.view({
+        agents: agents
+      });
+    });
   },
 
   create: function(req, res) {
@@ -40,13 +46,21 @@ module.exports = {
   },
 
   show: function(req, res, next) {
+
+    // TODO - These functions (find, findOne, etc.) return promises.  We should chain them instead of nesting them.
     Customer.findOne(req.param('id'), function foundCustomer(err, customer) {
       if (err) return next(err);
       if (!customer) return next();
 
-      // res.json(customer);
-      res.view({
-        customer: customer
+      Agent.findOne(customer.agent, function foundAgent(err, agent) {
+
+        if (err) return next(err);
+
+        // res.json(customer);
+        res.view({
+          agent: agent,
+          customer: customer
+        });
       });
     });
   },
@@ -54,9 +68,27 @@ module.exports = {
   index: function(req, res, next) {
     Customer.find(function foundCustomers(err, customers) {
       if (err) return next(err);
-      
-      res.view({
-        customers: customers
+
+      Agent.find().exec(function(err, agents) {
+
+        if (err) return next(err);
+
+        customers.forEach(function(customer) {
+          var agent,
+              agentIndex;
+
+          for (agentIndex = 0; agentIndex < agents.length; agentIndex++) {
+            agent = agents[agentIndex];
+            if (customer.agent === agent.id) {
+              customer.agentName = agent.firstName + ' ' + agent.lastName;
+            }
+          }
+
+        });
+        
+        res.view({
+          customers: customers
+        });
       });
     });
   },
@@ -67,8 +99,14 @@ module.exports = {
       if (err) return next(err);
       if (!customer) return next('customer doesn\'t exist.');
 
-      res.view({
-        customer: customer
+      Agent.find().exec(function(err, agents) {
+
+        if (err) return next(err);
+
+        res.view({
+          agents: agents,
+          customer: customer
+        });
       });
     });
   },

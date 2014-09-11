@@ -7,8 +7,19 @@
 
 module.exports = {
 
-  'new': function(req,res){
-    res.view();
+  'new': function(req, res) {
+    Customer.find().exec(function(err, customers) {
+      if (err) return next(err);
+
+      Agent.find().exec(function(err, agents) {
+        if (err) return next(err);
+
+        res.view({
+          agents: agents,
+          customers: customers
+        });
+      });
+    });
   },
 
   create: function(req, res) {
@@ -17,7 +28,8 @@ module.exports = {
       data:     req.param('data'),
       model:    req.param('model'),
       summary:  req.param('summary'),
-      customer: req.param('customer')
+      customer: req.param('customer'),
+      agent:    req.param('agent')
     }
 
     // Create a User with the params sent from
@@ -43,9 +55,22 @@ module.exports = {
       if (err) return next(err);
       if (!contactHistory) return next();
 
-      // res.json(contactHistory);
-      res.view({
-        contactHistory: contactHistory
+      Agent.findOne(contactHistory.agent, function foundAgent(err, agent) {
+        if (err) return next(err);
+        if (!agent) return next();
+
+        Customer.findOne(contactHistory.customer, function foundCustomer(err, customer) {
+          if (err) return next(err);
+          if (!customer) return next();
+
+          // res.json(contactHistory);
+          res.view({
+            contactHistory: contactHistory,
+            agent: agent,
+            customer: customer
+          });
+        });
+
       });
     });
   },
@@ -54,8 +79,39 @@ module.exports = {
     ContactHistory.find(function foundContactHistorys(err, contactHistorys) {
       if (err) return next(err);
 
-      res.view({
-        contactHistorys: contactHistorys
+      Agent.find().exec(function(err, agents) {
+        if (err) return next(err);
+
+        Customer.find().exec(function(err, customers) {
+          if (err) return next(err);
+
+          contactHistorys.forEach(function(contactHistory) {
+            var agent,
+                customer,
+                agentIndex,
+                customerIndex;
+
+            // TODO - At the very least these should be maps
+            for (agentIndex = 0; agentIndex < agents.length; agentIndex++) {
+              agent = agents[agentIndex];
+              if (parseInt(contactHistory.agent, 10) === parseInt(agent.id, 10)) {
+                contactHistory.agentName = agent.firstName + ' ' + agent.lastName;
+              }
+            }
+
+            for (customerIndex = 0; customerIndex < customers.length; customerIndex++) {
+              customer = customers[customerIndex];
+              if (parseInt(contactHistory.customer, 10) === parseInt(customer.id, 10)) {
+                contactHistory.customerName = customer.firstName + ' ' + customer.lastName;
+              }
+            }
+
+          });
+          
+          res.view({
+            contactHistorys: contactHistorys
+          });
+        });
       });
     });
   },
@@ -66,8 +122,18 @@ module.exports = {
       if (err) return next(err);
       if (!contactHistory) return next('contactHistory doesn\'t exist.');
 
-      res.view({
-        contactHistory: contactHistory
+      Agent.find().exec(function(err, agents) {
+        if (err) return next(err);
+
+        Customer.find().exec(function(err, customers) {
+          if (err) return next(err);
+
+          res.view({
+            agents: agents,
+            contactHistory: contactHistory,
+            customers: customers
+          });
+        });
       });
     });
   },
@@ -78,8 +144,9 @@ module.exports = {
       data: req.param('data'),
       model: req.param('model'),
       summary: req.param('summary'),
-      customer: req.param('customer')
-    }
+      customer: req.param('customer'),
+      agent: req.param('agent')
+    };
 
     ContactHistory.update(req.param('id'), paramObj, function contactHistoryUpdated(err) {
       if (err) {
@@ -87,7 +154,7 @@ module.exports = {
 
         req.session.flash = {
           err: err
-        }
+        };
 
         return res.redirect('/contactHistory/edit/' + req.param('id'));
       }
@@ -105,7 +172,7 @@ module.exports = {
 
       ContactHistory.destroy(req.param('id'), function contactHistoryDestroyed(err) {
         if (err) return next(err);
-    });
+      });
 
       res.redirect('/contactHistory');
 

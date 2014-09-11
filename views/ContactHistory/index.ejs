@@ -7,6 +7,7 @@
       <th> model </th>
       <th> summary </th>
       <th> customer </th>
+      <th> agent </th>
       <th></th>
       <th></th>
       <th></th>
@@ -18,7 +19,8 @@
         <td><%= contactHistory.data %></td>
         <td><%= contactHistory.model %></td>
         <td><%= contactHistory.summary %></td>
-        <td><%= contactHistory.customer %></td>
+        <td><%= contactHistory.customerName %></td>
+        <td><%= contactHistory.agentName %></td>
 
         <td><a href="/contactHistory/show/<%=contactHistory.id %>"  class="btn btn-primary btn-sm" role="button">Show</a></td>
         <td><a href="/contactHistory/edit/<%=contactHistory.id %>"  class="btn btn-primary btn-sm" role="button">Edit</a></td>

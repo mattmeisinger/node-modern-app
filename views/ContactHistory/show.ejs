@@ -19,7 +19,12 @@
 
     <div class="form-group" style="width: 400px;">
       <label>customer</label>
-      <input value="<%= contactHistory.customer %>" name="customer" type="text" class="form-control" disabled/>
+      <input value="<%= customer.firstName + ' ' + customer.lastName %>" name="customer" type="text" class="form-control" disabled/>
+    </div>
+
+    <div class="form-group" style="width: 400px;">
+      <label>agent</label>
+      <input value="<%= agent.firstName + ' ' + agent.lastName %>" name="agent" type="text" class="form-control" disabled/>
     </div>
 
   </div>

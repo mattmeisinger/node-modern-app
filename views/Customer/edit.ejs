@@ -32,7 +32,15 @@
 
     <div class="form-group" style="width: 400px;">
       <label>agent</label>
-      <input value="<%= customer.agent %>" name="agent" type="text" class="form-control"/>
+
+      <div>
+        <select name="agent" class="form-control">
+          <% for(var i=0; i<agents.length; i++) {%>
+          <option value="<%= agents[i].id %>" <%= (agents[i].id === customer.agent)?'selected':''%> ><%= agents[i].firstName + ' ' + agents[i].lastName %></option>
+          <% } %>
+        </select>
+      </div>
+
     </div>
 
   </div>
