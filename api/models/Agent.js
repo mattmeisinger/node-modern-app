@@ -20,6 +20,10 @@ module.exports = {
     customers : {
       collection: 'customer',
       via: 'agent'
+    },
+    contactHistory: {
+      collection: 'contactHistory',
+      via       : 'agent'
     }
   }
 
