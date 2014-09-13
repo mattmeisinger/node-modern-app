@@ -5,26 +5,25 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
+var Q = require('q');
+
 module.exports = {
 
   'new': function(req, res) {
-    Customer.find().exec(function(err, customers) {
-      if (err) return next(err);
-
-      Agent.find().exec(function(err, agents) {
-        if (err) return next(err);
-
+    Q.all([Customer.find(), Agent.find()])
+      .spread(function(customers, agents) {
         res.view({
           agents: agents,
           customers: customers
         });
+      })
+      .catch(function(err) {
+        return next(err);
       });
-    });
   },
 
   create: function(req, res) {
-
-    var paramObj = {
+    var obj = {
       data:     req.param('data'),
       model:    req.param('model'),
       summary:  req.param('summary'),
@@ -32,114 +31,67 @@ module.exports = {
       agent:    req.param('agent')
     }
 
-    // Create a User with the params sent from
-    // the sign-up form --> new.ejs
-    ContactHistory.create(paramObj, function contactHistoryCreated(err, contactHistory) {
-
-      if (err) {
-        console.log(err);
+    ContactHistory
+      .create(obj)
+      .then(function(contactHistory) {
+        res.redirect('/contactHistory/show/' + contactHistory.id);
+      })
+      .catch(function(err) {
         req.session.flash = {
           err: err
         }
         return res.redirect('/contactHistory/new');
-      }
-
-      // res.json(contactHistory);
-      res.redirect('/contactHistory/show/' + contactHistory.id);
-
-    });
+      });
   },
 
   show: function(req, res, next) {
-    ContactHistory.findOne(req.param('id'), function foundContactHistory(err, contactHistory) {
-      if (err) return next(err);
-      if (!contactHistory) return next();
-
-      Agent.findOne(contactHistory.agent, function foundAgent(err, agent) {
-        if (err) return next(err);
-        if (!agent) return next();
-
-        Customer.findOne(contactHistory.customer, function foundCustomer(err, customer) {
-          if (err) return next(err);
-          if (!customer) return next();
-
-          // res.json(contactHistory);
-          res.view({
-            contactHistory: contactHistory,
-            agent: agent,
-            customer: customer
-          });
-        });
-
+    ContactHistory
+      .findOne(req.param('id'))
+      .populate('customer')
+      .populate('agent')
+      .then(function(contactHistory) {
+          res.view({ contactHistory: contactHistory });
+      })
+      .catch(function(err) {
+        return next(err);
       });
-    });
   },
 
   index: function(req, res, next) {
-    ContactHistory.find(function foundContactHistorys(err, contactHistorys) {
-      if (err) return next(err);
-
-      Agent.find().exec(function(err, agents) {
-        if (err) return next(err);
-
-        Customer.find().exec(function(err, customers) {
-          if (err) return next(err);
-
-          contactHistorys.forEach(function(contactHistory) {
-            var agent,
-                customer,
-                agentIndex,
-                customerIndex;
-
-            // TODO - At the very least these should be maps
-            for (agentIndex = 0; agentIndex < agents.length; agentIndex++) {
-              agent = agents[agentIndex];
-              if (parseInt(contactHistory.agent, 10) === parseInt(agent.id, 10)) {
-                contactHistory.agentName = agent.firstName + ' ' + agent.lastName;
-              }
-            }
-
-            for (customerIndex = 0; customerIndex < customers.length; customerIndex++) {
-              customer = customers[customerIndex];
-              if (parseInt(contactHistory.customer, 10) === parseInt(customer.id, 10)) {
-                contactHistory.customerName = customer.firstName + ' ' + customer.lastName;
-              }
-            }
-
-          });
-          
-          res.view({
-            contactHistorys: contactHistorys
-          });
-        });
+    ContactHistory
+      .find()
+      .populate('customer')
+      .populate('agent')
+      .then(function(contactHistorys) {
+          res.view({ contactHistorys: contactHistorys });
+      })
+      .catch(function(err) {
+        return next(err);
       });
-    });
   },
 
   edit: function(req, res, next) {
-
-    ContactHistory.findOne(req.param('id'), function foundContactHistory(err, contactHistory) {
-      if (err) return next(err);
-      if (!contactHistory) return next('contactHistory doesn\'t exist.');
-
-      Agent.find().exec(function(err, agents) {
-        if (err) return next(err);
-
-        Customer.find().exec(function(err, customers) {
-          if (err) return next(err);
-
-          res.view({
-            agents: agents,
-            contactHistory: contactHistory,
-            customers: customers
-          });
+    Q.all([
+        ContactHistory
+          .findOne(req.param('id'))
+          .populate('customer')
+          .populate('agent'),
+        Customer.find(),
+        Agent.find()
+        ])
+      .spread(function(contactHistory, customers, agents) {
+        res.view({
+          contactHistory: contactHistory,
+          customers: customers,
+          agents: agents,
         });
+      })
+      .catch(function(err) {
+        return next(err);
       });
-    });
   },
 
   update: function(req, res, next) {
-
     var paramObj = {
       data: req.param('data'),
       model: req.param('model'),
@@ -148,19 +100,18 @@ module.exports = {
       agent: req.param('agent')
     };
 
-    ContactHistory.update(req.param('id'), paramObj, function contactHistoryUpdated(err) {
-      if (err) {
-        console.log(err);
-
+    ContactHistory
+      .update(req.param('id'), paramObj)
+      .then(function (contactHistory) {
+      })
+      .catch(function (err) {
         req.session.flash = {
           err: err
         };
-
+      })
+      .done(function() {
         return res.redirect('/contactHistory/edit/' + req.param('id'));
-      }
-
-      res.redirect('/contactHistory/show/' + req.param('id'));
-    });
+      });
   },
 
   destroy: function(req, res, next) {
