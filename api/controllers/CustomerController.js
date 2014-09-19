@@ -5,6 +5,8 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
+var Q = require('q');
+
 module.exports = {
 	
   'new': function(req, res) {
@@ -66,49 +68,32 @@ module.exports = {
   },
 
   index: function(req, res, next) {
-    Customer.find(function foundCustomers(err, customers) {
-      if (err) return next(err);
-
-      Agent.find().exec(function(err, agents) {
-
-        if (err) return next(err);
-
-        customers.forEach(function(customer) {
-          var agent,
-              agentIndex;
-
-          for (agentIndex = 0; agentIndex < agents.length; agentIndex++) {
-            agent = agents[agentIndex];
-            if (customer.agent === agent.id) {
-              customer.agentName = agent.firstName + ' ' + agent.lastName;
-            }
-          }
-
-        });
-        
-        res.view({
-          customers: customers
-        });
+    Customer.find()
+      .populate('agent')
+      .then(function(customers) {
+        res.view({ customers: customers });
+      })
+      .catch(function(err) {
+        return next(err);
       });
-    });
   },
 
   edit: function(req, res, next) {
-
-    Customer.findOne(req.param('id'), function foundCustomer(err, customer) {
-      if (err) return next(err);
-      if (!customer) return next('customer doesn\'t exist.');
-
-      Agent.find().exec(function(err, agents) {
-
-        if (err) return next(err);
-
+    Q.all([
+        Customer
+          .findOne(req.param('id'))
+          .populate('agent'),
+        Agent.find()
+      ])
+      .spread(function(customer, agents) {
         res.view({
+          customer: customer,
           agents: agents,
-          customer: customer
         });
+      })
+      .catch(function(err) {
+        return next(err);
       });
-    });
   },
 
   update: function(req, res, next) {

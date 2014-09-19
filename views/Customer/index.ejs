@@ -1,28 +1,30 @@
 <div class="container">
   <h3>Customer Listing</h3>
   <table class='table table-hover table-condensed'>
-    <tr>
+    <thead>
+      <tr>
 
-      <th> firstName </th>
-      <th> lastName </th>
-      <th> email </th>
-      <th> phone </th>
-      <th> agent </th>
+        <th> First Name </th>
+        <th> Last Name </th>
+        <th> Email </th>
+        <th> Phone </th>
+        <th> Agent </th>
 
-      <th></th>
-      <th></th>
-      <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
 
-    </tr>
-
+      </tr>
+    </thead>
+    <tbody>
     <% _.forEach(customers, function(customer) { %>
       <tr data-id="<%=customer.id %>" data-model="customer">
 
-        <td><%= customer.firstName%></td>
-        <td><%= customer.lastName%></td>
-        <td><%= customer.email%></td>
-        <td><%= customer.phone%></td>
-        <td><%= customer.agentName%></td>
+        <td><%= customer.firstName %></td>
+        <td><%= customer.lastName %></td>
+        <td><%= customer.email %></td>
+        <td><%= customer.phone %></td>
+        <td><%= customer.agent ? customer.agent.lastName + ', ' + customer.agent.firstName : '' %></td>
 
         <td><a href="/customer/show/<%=customer.id %>"  class="btn btn-primary btn-sm" role="button">Show</a></td>
         <td><a href="/customer/edit/<%=customer.id %>"  class="btn btn-primary btn-sm" role="button">Edit</a></td>
@@ -35,6 +37,7 @@
        </td>
       </tr>
     <% }) %>
+    </tbody>
   </table>
 
   <a href="/customer/new/" class="btn btn-success btn-sm" role="button">New Customer</a> |
