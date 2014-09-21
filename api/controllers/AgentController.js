@@ -16,8 +16,7 @@ module.exports = {
       firstName: req.param('firstName'),
       lastName:  req.param('lastName'),
       email:     req.param('email'),
-      phone:     req.param('phone'),
-      customers: req.param('customers')
+      phone:     req.param('phone')
     }
 
     Agent
@@ -80,8 +79,7 @@ module.exports = {
       firstName: req.param('firstName'),
       lastName:  req.param('lastName'),
       email:     req.param('email'),
-      phone:     req.param('phone'),
-      customers: req.param('customers')
+      phone:     req.param('phone')
     }
 
     Agent

@@ -9,9 +9,12 @@ html {
   font-family: sans-serif;
   -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
+  background-color: #eee;
 }
 body {
   margin: 0;
+  background-color: #eee;
+
 }
 article,
 aside,
@@ -277,7 +280,7 @@ body {
   font-size: 14px;
   line-height: 1.42857143;
   color: #333;
-  background-color: #fff;
+  background-color: #eee;
 }
 input,
 button,
@@ -350,6 +353,9 @@ hr {
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
+h1#crm{
+  font-size: 45px;
+}
 h1,
 h2,
 h3,
@@ -362,7 +368,7 @@ h6,
 .h4,
 .h5,
 .h6 {
-  font-family: inherit;
+  font-family: sanchez, sans-serif;
   font-weight: 500;
   line-height: 1.1;
   color: inherit;
@@ -2330,6 +2336,8 @@ fieldset[disabled] .btn-link:focus {
   font-size: 12px;
   line-height: 1.5;
   border-radius: 3px;
+  background-color: #33CCCC;
+  border: none;
 }
 .btn-xs,
 .btn-group-xs > .btn {
@@ -5780,6 +5788,21 @@ button.close {
 @media print {
   .hidden-print {
     display: none !important;
-  }
+  };
+}
+
+.spar-list{
+  background-color: #33CCCC;
+  border: none;
+  position: relative;
+  height: 90px;
+  width: 190px;
+  font-size: 24px;
+  font-family: Sanchez, sans-serif;
+  text-align: center;
+
+}
+.spar-list:hover{
+  background-color: #66FFCC;
 }
 /*# sourceMappingURL=bootstrap.css.map */
