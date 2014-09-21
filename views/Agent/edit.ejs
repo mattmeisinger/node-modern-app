@@ -4,9 +4,9 @@
 
     <% if(flash && flash.err) { %>
       <ul class="alert alert-success">
-    <% Object.keys(flash.err).forEach(function(error) { %>
-      <li><%- JSON.stringify(flash.err[error]) %></li>
-    <% }) %>
+      <% Object.keys(flash.err).forEach(function(error) { %>
+        <li><%- JSON.stringify(flash.err[error]) %></li>
+      <% }) %>
       </ul>
     <% } %>
 
@@ -28,11 +28,6 @@
     <div class="form-group" style="width: 400px;">
       <label>Phone</label>
       <input value="<%= agent.phone %>" name="phone" type="text" class="form-control"/>
-    </div>
-
-    <div class="form-group" style="width: 400px;">
-      <label>Customers</label>
-      <input value="<%= agent.customers %>" name="customers" type="text" class="form-control"/>
     </div>
 
   </div>

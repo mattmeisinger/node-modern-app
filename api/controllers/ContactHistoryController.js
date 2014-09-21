@@ -5,111 +5,133 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
+var Q = require('q');
+
 module.exports = {
 
-  'new': function(req,res){
-    res.view();
+  'new': function(req, res) {
+    Q.all([Customer.find(), Agent.find()])
+      .spread(function(customers, agents) {
+        res.view({
+          agents: agents,
+          customers: customers
+        });
+      })
+      .catch(function(err) {
+        return next(err);
+      })
+      .done();
   },
 
   create: function(req, res) {
-
-    var paramObj = {
+    var obj = {
       data:     req.param('data'),
       model:    req.param('model'),
       summary:  req.param('summary'),
-      customer: req.param('customer')
+      customer: req.param('customer'),
+      agent:    req.param('agent')
     }
 
-    // Create a User with the params sent from
-    // the sign-up form --> new.ejs
-    ContactHistory.create(paramObj, function contactHistoryCreated(err, contactHistory) {
-
-      if (err) {
-        console.log(err);
+    ContactHistory
+      .create(obj)
+      .then(function(contactHistory) {
+        res.redirect('/contactHistory/show/' + contactHistory.id);
+      })
+      .catch(function(err) {
         req.session.flash = {
           err: err
         }
-        return res.redirect('/contactHistory/new');
-      }
-
-      // res.json(contactHistory);
-      res.redirect('/contactHistory/show/' + contactHistory.id);
-
-    });
+        res.redirect('/contactHistory/new');
+      })
+      .done();
   },
 
   show: function(req, res, next) {
-    ContactHistory.findOne(req.param('id'), function foundContactHistory(err, contactHistory) {
-      if (err) return next(err);
-      if (!contactHistory) return next();
-
-      // res.json(contactHistory);
-      res.view({
-        contactHistory: contactHistory
-      });
-    });
+    ContactHistory
+      .findOne(req.param('id'))
+      .populate('customer')
+      .populate('agent')
+      .then(function(contactHistory) {
+        if (!contactHistory) throw new Error('ContactHistory doesn\'t exist.');
+        res.view({ contactHistory: contactHistory });
+      })
+      .fail(function(err) {
+        return next(err);
+      })
+      .done();
   },
 
   index: function(req, res, next) {
-    ContactHistory.find(function foundContactHistorys(err, contactHistorys) {
-      if (err) return next(err);
-
-      res.view({
-        contactHistorys: contactHistorys
-      });
-    });
+    ContactHistory
+      .find()
+      .populate('customer')
+      .populate('agent')
+      .then(function(contactHistorys) {
+          res.view({ contactHistorys: contactHistorys });
+      })
+      .catch(function(err) {
+        return next(err);
+      })
+      .done();
   },
 
   edit: function(req, res, next) {
-
-    ContactHistory.findOne(req.param('id'), function foundContactHistory(err, contactHistory) {
-      if (err) return next(err);
-      if (!contactHistory) return next('contactHistory doesn\'t exist.');
-
-      res.view({
-        contactHistory: contactHistory
-      });
-    });
+    Q.all([
+        ContactHistory
+          .findOne(req.param('id'))
+          .populate('customer')
+          .populate('agent'),
+        Customer.find(),
+        Agent.find()
+        ])
+      .spread(function(contactHistory, customers, agents) {
+        if (!contactHistory) throw new Error('ContactHistory doesn\'t exist.');
+        res.view({
+          contactHistory: contactHistory,
+          customers: customers,
+          agents: agents,
+        });
+      })
+      .fail(function(err) {
+        return next(err);
+      })
+      .done();
   },
 
   update: function(req, res, next) {
-
     var paramObj = {
       data: req.param('data'),
       model: req.param('model'),
       summary: req.param('summary'),
-      customer: req.param('customer')
-    }
+      customer: req.param('customer'),
+      agent: req.param('agent')
+    };
 
-    ContactHistory.update(req.param('id'), paramObj, function contactHistoryUpdated(err) {
-      if (err) {
-        console.log(err);
-
+    ContactHistory
+      .update(req.param('id'), paramObj)
+      .fail(function(err) {
         req.session.flash = {
           err: err
-        }
-
-        return res.redirect('/contactHistory/edit/' + req.param('id'));
-      }
-
-      res.redirect('/contactHistory/show/' + req.param('id'));
-    });
+        };
+      })
+      .done(function() {
+        res.redirect('/contactHistory/edit/' + req.param('id'));
+      });
   },
 
   destroy: function(req, res, next) {
-
-    ContactHistory.findOne(req.param('id'), function foundContactHistory(err, contactHistory) {
-      if (err) return next(err);
-
-      if (!contactHistory) return next('ContactHistory doesn\'t exist.');
-
-      ContactHistory.destroy(req.param('id'), function contactHistoryDestroyed(err) {
-        if (err) return next(err);
-    });
-
-      res.redirect('/contactHistory');
-
-    });
+    ContactHistory
+      .findOne(req.param('id'))
+      .then(function(contactHistory) {
+        if (!contactHistory) throw new Error('ContactHistory doesn\'t exist.');
+        return ContactHistory.destroy(req.param('id'));
+      })
+      .fail(function(err) {
+        return next(err);
+      })
+      .done(function() {
+        res.redirect('/contactHistory');
+      });
   }
 
 };

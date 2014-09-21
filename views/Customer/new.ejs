@@ -26,8 +26,17 @@
       <input type="text" class="form-control" placeholder="phone" name="phone">
     </div>
 
-    <div class="control-group" style = "width: 300px;">
-      <input type="text" class="form-control" placeholder="agentId" name="agent">
+    <div class="form-group" style="width: 400px;">
+      <label>agent</label>
+
+      <div>
+        <select name="agent" class="form-control">
+          <% for(var i=0; i<agents.length; i++) {%>
+          <option value="<%= agents[i].id %>" ><%= agents[i].firstName + ' ' + agents[i].lastName %></option>
+          <% } %>
+        </select>
+      </div>
+
     </div>
 
   </div>

@@ -5,14 +5,25 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
+var Q = require('q');
+
 module.exports = {
-	
-  'new': function(req,res){
-    res.view();    
+
+  'new': function(req, res) {
+    Agent
+      .find()
+      .then(function(agents) {
+        res.view({
+          agents: agents
+        });
+      })
+      .catch(function(err) {
+        return next(err);
+      })
+      .done();
   },
 
   create: function(req, res) {
-
     var paramObj = {
       firstName: req.param('firstName'),
       lastName:  req.param('lastName'),
@@ -21,60 +32,67 @@ module.exports = {
       agent:     req.param('agent')
     }
 
-    // Create a User with the params sent from 
-    // the sign-up form --> new.ejs
-    Customer.create(paramObj, function customerCreated(err, customer) {
-
-      if (err) {
-        console.log(err);
+    Customer.create(paramObj)
+      .then(function(customer) {
+        res.redirect('/customer/show/' + customer.id);
+      })
+      .catch(function(err) {
         req.session.flash = {
           err: err
         }
-        return res.redirect('/customer/new');
-      }
-
-      // res.json(customer);
-      res.redirect('/customer/show/' + customer.id);
-
-    });
+        res.redirect('/customer/new');
+      })
+      .done();
   },
 
   show: function(req, res, next) {
-    Customer.findOne(req.param('id'), function foundCustomer(err, customer) {
-      if (err) return next(err);
-      if (!customer) return next();
-
-      // res.json(customer);
-      res.view({
-        customer: customer
-      });
-    });
+    Customer
+      .findOne(req.param('id'))
+      .populate('agent')
+      .then(function(customer) {
+        if (!customer) throw new Error('Customer doesn\'t exist.');
+        res.view({
+          customer: customer
+        });
+      })
+      .fail(function(err) {
+        return next(err);
+      })
+      .done();
   },
 
   index: function(req, res, next) {
-    Customer.find(function foundCustomers(err, customers) {
-      if (err) return next(err);
-      
-      res.view({
-        customers: customers
-      });
-    });
+    Customer.find()
+      .populate('agent')
+      .then(function(customers) {
+        res.view({ customers: customers });
+      })
+      .catch(function(err) {
+        return next(err);
+      })
+      .done();
   },
 
   edit: function(req, res, next) {
-
-    Customer.findOne(req.param('id'), function foundCustomer(err, customer) {
-      if (err) return next(err);
-      if (!customer) return next('customer doesn\'t exist.');
-
-      res.view({
-        customer: customer
-      });
-    });
+    Q.all([
+        Customer
+          .findOne(req.param('id'))
+          .populate('agent'),
+        Agent.find()
+      ])
+      .spread(function(customer, agents) {
+        res.view({
+          customer: customer,
+          agents: agents,
+        });
+      })
+      .catch(function(err) {
+        return next(err);
+      })
+      .done();
   },
 
   update: function(req, res, next) {
-
     var paramObj = {
       firstName: req.param('firstName'),
       lastName:  req.param('lastName'),
@@ -83,37 +101,34 @@ module.exports = {
       agent:     req.param('agent')
     }
 
-    Customer.update(req.param('id'), paramObj, function customerUpdated(err) {
-      if (err) {
+    Customer
+      .update(req.param('id'), paramObj)
+      .fail(function(err) {
         console.log(err);
-
         req.session.flash = {
           err: err
-        }
-
-        return res.redirect('/customer/edit/' + req.param('id'));
-      }
-
-      res.redirect('/customer/show/' + req.param('id'));
-    });
+        };
+        res.redirect('/customer/edit/' + req.param('id'));
+      })
+      .done(function() {
+        res.redirect('/customer/show/' + req.param('id'));
+      });
   },
 
   destroy: function(req, res, next) {
-
-    Customer.findOne(req.param('id'), function foundCustomer(err, customer) {
-      if (err) return next(err);
-
-      if (!customer) return next('Customer doesn\'t exist.');
-
-      Customer.destroy(req.param('id'), function customerDestroyed(err) {
-        if (err) return next(err);
-    });        
-
-      res.redirect('/customer');
-
-    });
+    Customer
+      .findOne(req.param('id'))
+      .then(function(customer) {
+        if (!customer) throw new Error('Customer doesn\'t exist.');
+        return Customer.destroy(req.param('id'));
+      })
+      .fail(function(err) {
+        return next(err);
+      })
+      .done(function() {
+        res.redirect('/customer');
+      });
   }
- 
 
 };
 

@@ -2,39 +2,39 @@
   <h3>Agent Listing</h3>
 
   <table class='table table-hover table-condensed'>
+    <thead>
+      <tr>
+        <th> firstName </th>
+        <th> lastName </th>
+        <th> email </th>
+        <th> phone </th>
 
-    <tr>
-      <th> First Name </th>
-      <th> Last Name </th>
-      <th> Email </th>
-      <th> Phone </th>
-
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-
-    <% _.forEach(agents, function(agent) { %>
-      <tr data-id="<%=agent.id %>" data-model="agent">
-
-        <td><%= agent.firstName %></td>
-        <td><%= agent.lastName %></td>
-        <td><%= agent.email %></td>
-        <td><%= agent.phone %></td>
-        <td><%= agent.customers %></td>
-
-        <td><a href="/agent/show/<%=agent.id %>"  class="btn btn-primary btn-sm" role="button">Show</a></td>
-        <td><a href="/agent/edit/<%=agent.id %>"  class="btn btn-primary btn-sm" role="button">Edit</a></td>
-
-        <td>
-          <form action="/agent/destroy/<%=agent.id %>" method="POST">
-            <input type="hidden" name="_method" value="delete"/>
-            <input type="submit" value="Delete"  class="btn btn-danger btn-sm" role="button"/>
-          </form>
-        </td>
+        <th></th>
+        <th></th>
+        <th></th>
       </tr>
-    <% }) %>
+    </thead>
+    <tbody>
+      <% _.forEach(agents, function(agent) { %>
+        <tr data-id="<%=agent.id %>" data-model="agent">
 
+          <td><%= agent.firstName %></td>
+          <td><%= agent.lastName %></td>
+          <td><%= agent.email %></td>
+          <td><%= agent.phone %></td>
+
+          <td><a href="/agent/show/<%=agent.id %>"  class="btn btn-primary btn-sm" role="button">Show</a></td>
+          <td><a href="/agent/edit/<%=agent.id %>"  class="btn btn-primary btn-sm" role="button">Edit</a></td>
+
+          <td>
+            <form action="/agent/destroy/<%=agent.id %>" method="POST">
+              <input type="hidden" name="_method" value="delete"/>
+              <input type="submit" value="Delete"  class="btn btn-danger btn-sm" role="button"/>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
   </table>
 
   <a href="/agent/new/" class="btn btn-success btn-sm" role="button">New Agent</a> |

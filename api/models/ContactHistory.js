@@ -11,6 +11,7 @@ module.exports = {
     data      : { type: 'string' },
     model     : { type: 'string' },
     summary   : { type: 'string' },
+    agent     : { model: 'agent' },
     customer  : { model: 'customer' }
   }
 

@@ -12,108 +12,101 @@ module.exports = {
   },
 
   create: function(req, res) {
-
     var paramObj = {
       firstName: req.param('firstName'),
       lastName:  req.param('lastName'),
       email:     req.param('email'),
-      phone:     req.param('phone'),
-      customers: req.param('customers')
+      phone:     req.param('phone')
     }
 
-    // Create a User with the params sent from
-    // the sign-up form --> new.ejs
-    Agent.create(paramObj, function agentCreated(err, agent) {
-
-      if (err) {
-        console.log(err);
+    Agent
+      .create(paramObj)
+      .then(function(agent) {
+        res.redirect('/agent/show/' + agent.id);
+      })
+      .catch(function(err) {
         req.session.flash = {
           err: err
         }
-        return res.redirect('/agent/new');
-      }
-
-      // res.json(agent);
-      res.redirect('/agent/show/' + agent.id);
-
-    });
+        res.redirect('/agent/new');
+      })
+      .done();
   },
 
   show: function(req, res, next) {
-    Agent.findOne(req.param('id'))
+    Agent
+      .findOne(req.param('id'))
       .populate('customers')
-      .exec(function(err, agent) {
-        if (err) return next(err);
-        if (!agent) return next();
-
-        res.view({
-          agent: agent
-        });
-    });
+      .then(function(agent) {
+        if (!agent) throw new Error('Agent doesn\'t exist.');
+        res.view({ agent: agent });
+      })
+      .fail(function(err) {
+        return next(err);
+      })
+      .done();
   },
 
   index: function(req, res, next) {
-    Agent.find()
+    Agent
+      .find()
       .populate('customers')
-      .exec(function (err, agents) {
-      if (err) return next(err);
-
-      res.view({
-        agents: agents
-      });
-    });
+      .then(function(agents) {
+        res.view({ agents: agents });
+      })
+      .catch(function(err) {
+        return next(err);
+      })
+      .done();
   },
 
   edit: function(req, res, next) {
-    Agent.findOne(req.param('id'))
+    Agent
+      .findOne(req.param('id'))
       .populate('customers')
-      .exec(function(err, agent) {
-      if (err) return next(err);
-      if (!agent) return next('agent doesn\'t exist.');
-
-
-      res.view({
-        agent: agent
-      });
-    });
+      .then(function(agent) {
+        if (!agent) throw new Error('Agent doesn\'t exist.');
+        res.view({ agent: agent });
+      })
+      .fail(function(err) {
+        return next(err);
+      })
+      .done();
   },
 
   update: function(req, res, next) {
-
     var paramObj = {
       firstName: req.param('firstName'),
       lastName:  req.param('lastName'),
       email:     req.param('email'),
-      phone:     req.param('phone'),
-      customers: req.param('customers')
+      phone:     req.param('phone')
     }
 
-    Agent.update(req.param('id'), paramObj, function agentUpdated(err) {
-      if (err) {
-        console.log(err);
-
+    Agent
+      .update(req.param('id'), paramObj)
+      .fail(function(err) {
         req.session.flash = {
           err: err
-        }
-
-        return res.redirect('/agent/edit/' + req.param('id'));
-      }
-
-      res.redirect('/agent/show/' + req.param('id'));
-    });
+        };
+        res.redirect('/agent/edit/' + req.param('id'));
+      })
+      .done(function() {
+        res.redirect('/agent/show/' + req.param('id'));
+      });
   },
 
   destroy: function(req, res, next) {
-    Agent.findOne(req.param('id'), function foundAgent(err, agent) {
-      if (err) return next(err);
-      if (!agent) return next('Agent doesn\'t exist.');
-
-      Agent.destroy(req.param('id'), function agentDestroyed(err) {
-        if (err) return next(err);
+    Agent.findOne(req.param('id'))
+      .then(function (agent) {
+        if (!agent) throw new Error('Agent doesn\'t exist.');
+        return Agent.destroy(req.param('id'));
+      })
+      .fail(function(err) {
+        return next(err);
+      })
+      .done(function() {
+        res.redirect('/agent');
       });
-
-      res.redirect('/agent');
-    });
   }
 };
 
