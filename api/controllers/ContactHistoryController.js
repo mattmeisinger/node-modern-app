@@ -19,7 +19,8 @@ module.exports = {
       })
       .catch(function(err) {
         return next(err);
-      });
+      })
+      .done();
   },
 
   create: function(req, res) {
@@ -40,8 +41,9 @@ module.exports = {
         req.session.flash = {
           err: err
         }
-        return res.redirect('/contactHistory/new');
-      });
+        res.redirect('/contactHistory/new');
+      })
+      .done();
   },
 
   show: function(req, res, next) {
@@ -50,11 +52,13 @@ module.exports = {
       .populate('customer')
       .populate('agent')
       .then(function(contactHistory) {
-          res.view({ contactHistory: contactHistory });
+        if (!contactHistory) throw new Error('ContactHistory doesn\'t exist.');
+        res.view({ contactHistory: contactHistory });
       })
-      .catch(function(err) {
+      .fail(function(err) {
         return next(err);
-      });
+      })
+      .done();
   },
 
   index: function(req, res, next) {
@@ -67,7 +71,8 @@ module.exports = {
       })
       .catch(function(err) {
         return next(err);
-      });
+      })
+      .done();
   },
 
   edit: function(req, res, next) {
@@ -80,15 +85,17 @@ module.exports = {
         Agent.find()
         ])
       .spread(function(contactHistory, customers, agents) {
+        if (!contactHistory) throw new Error('ContactHistory doesn\'t exist.');
         res.view({
           contactHistory: contactHistory,
           customers: customers,
           agents: agents,
         });
       })
-      .catch(function(err) {
+      .fail(function(err) {
         return next(err);
-      });
+      })
+      .done();
   },
 
   update: function(req, res, next) {
@@ -102,32 +109,29 @@ module.exports = {
 
     ContactHistory
       .update(req.param('id'), paramObj)
-      .then(function (contactHistory) {
-      })
-      .catch(function (err) {
+      .fail(function(err) {
         req.session.flash = {
           err: err
         };
       })
       .done(function() {
-        return res.redirect('/contactHistory/edit/' + req.param('id'));
+        res.redirect('/contactHistory/edit/' + req.param('id'));
       });
   },
 
   destroy: function(req, res, next) {
-
-    ContactHistory.findOne(req.param('id'), function foundContactHistory(err, contactHistory) {
-      if (err) return next(err);
-
-      if (!contactHistory) return next('ContactHistory doesn\'t exist.');
-
-      ContactHistory.destroy(req.param('id'), function contactHistoryDestroyed(err) {
-        if (err) return next(err);
+    ContactHistory
+      .findOne(req.param('id'))
+      .then(function(contactHistory) {
+        if (!contactHistory) throw new Error('ContactHistory doesn\'t exist.');
+        return ContactHistory.destroy(req.param('id'));
+      })
+      .fail(function(err) {
+        return next(err);
+      })
+      .done(function() {
+        res.redirect('/contactHistory');
       });
-
-      res.redirect('/contactHistory');
-
-    });
   }
 
 };

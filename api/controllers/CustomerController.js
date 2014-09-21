@@ -8,19 +8,22 @@
 var Q = require('q');
 
 module.exports = {
-	
-  'new': function(req, res) {
-    Agent.find().exec(function(err, agents) {
-      if (err) return next(err);
 
-      res.view({
-        agents: agents
-      });
-    });
+  'new': function(req, res) {
+    Agent
+      .find()
+      .then(function(agents) {
+        res.view({
+          agents: agents
+        });
+      })
+      .catch(function(err) {
+        return next(err);
+      })
+      .done();
   },
 
   create: function(req, res) {
-
     var paramObj = {
       firstName: req.param('firstName'),
       lastName:  req.param('lastName'),
@@ -29,42 +32,33 @@ module.exports = {
       agent:     req.param('agent')
     }
 
-    // Create a User with the params sent from 
-    // the sign-up form --> new.ejs
-    Customer.create(paramObj, function customerCreated(err, customer) {
-
-      if (err) {
-        console.log(err);
+    Customer.create(paramObj)
+      .then(function(customer) {
+        res.redirect('/customer/show/' + customer.id);
+      })
+      .catch(function(err) {
         req.session.flash = {
           err: err
         }
-        return res.redirect('/customer/new');
-      }
-
-      // res.json(customer);
-      res.redirect('/customer/show/' + customer.id);
-
-    });
+        res.redirect('/customer/new');
+      })
+      .done();
   },
 
   show: function(req, res, next) {
-
-    // TODO - These functions (find, findOne, etc.) return promises.  We should chain them instead of nesting them.
-    Customer.findOne(req.param('id'), function foundCustomer(err, customer) {
-      if (err) return next(err);
-      if (!customer) return next();
-
-      Agent.findOne(customer.agent, function foundAgent(err, agent) {
-
-        if (err) return next(err);
-
-        // res.json(customer);
+    Customer
+      .findOne(req.param('id'))
+      .populate('agent')
+      .then(function(customer) {
+        if (!customer) throw new Error('Customer doesn\'t exist.');
         res.view({
-          agent: agent,
           customer: customer
         });
-      });
-    });
+      })
+      .fail(function(err) {
+        return next(err);
+      })
+      .done();
   },
 
   index: function(req, res, next) {
@@ -75,7 +69,8 @@ module.exports = {
       })
       .catch(function(err) {
         return next(err);
-      });
+      })
+      .done();
   },
 
   edit: function(req, res, next) {
@@ -93,11 +88,11 @@ module.exports = {
       })
       .catch(function(err) {
         return next(err);
-      });
+      })
+      .done();
   },
 
   update: function(req, res, next) {
-
     var paramObj = {
       firstName: req.param('firstName'),
       lastName:  req.param('lastName'),
@@ -106,37 +101,34 @@ module.exports = {
       agent:     req.param('agent')
     }
 
-    Customer.update(req.param('id'), paramObj, function customerUpdated(err) {
-      if (err) {
+    Customer
+      .update(req.param('id'), paramObj)
+      .fail(function(err) {
         console.log(err);
-
         req.session.flash = {
           err: err
-        }
-
-        return res.redirect('/customer/edit/' + req.param('id'));
-      }
-
-      res.redirect('/customer/show/' + req.param('id'));
-    });
+        };
+        res.redirect('/customer/edit/' + req.param('id'));
+      })
+      .done(function() {
+        res.redirect('/customer/show/' + req.param('id'));
+      });
   },
 
   destroy: function(req, res, next) {
-
-    Customer.findOne(req.param('id'), function foundCustomer(err, customer) {
-      if (err) return next(err);
-
-      if (!customer) return next('Customer doesn\'t exist.');
-
-      Customer.destroy(req.param('id'), function customerDestroyed(err) {
-        if (err) return next(err);
-    });        
-
-      res.redirect('/customer');
-
-    });
+    Customer
+      .findOne(req.param('id'))
+      .then(function(customer) {
+        if (!customer) throw new Error('Customer doesn\'t exist.');
+        return Customer.destroy(req.param('id'));
+      })
+      .fail(function(err) {
+        return next(err);
+      })
+      .done(function() {
+        res.redirect('/customer');
+      });
   }
- 
 
 };
 
