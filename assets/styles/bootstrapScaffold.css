@@ -2325,7 +2325,7 @@ fieldset[disabled] .btn-link:focus {
 }
 .btn-lg,
 .btn-group-lg > .btn {
-  padding: 10px 16px;
+  padding: 28px 16px;
   font-size: 18px;
   line-height: 1.33;
   border-radius: 6px;
@@ -5796,8 +5796,8 @@ button.close {
   border: none;
   position: relative;
   height: 90px;
-  width: 190px;
-  font-size: 24px;
+  width: 257px;
+  font-size: 30px;
   font-family: Sanchez, sans-serif;
   text-align: center;
 
