@@ -1,0 +1,29 @@
+<h3>Agent Listing</h3>
+
+<table class='table table-hover table-condensed'>
+<thead>
+  <tr>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Email</th>
+    <th>Phone</th>
+
+    <th></th>
+    <th></th>
+  </tr>
+</thead>
+<tbody>
+  <tr ng-repeat="item in items">
+    <td>{{ item.firstName }}</td>
+    <td>{{ item.lastName }}</td>
+    <td>{{ item.email }}</td>
+    <td>{{ item.phone }}</td>
+
+    <td><a href="#/Agent/{{item.id}}" class="btn btn-primary btn-sm">Edit</a></td>
+    <td><a href="" class="btn btn-danger btn-sm" ng-click="delete(item)">Delete</a></td>
+  </tr>
+</tbody>
+</table>
+
+<a href="#/Agent/0" class="btn btn-success btn-sm" role="button">New Agent</a> |
+<a href="#/">Back</a>

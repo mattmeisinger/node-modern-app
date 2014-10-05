@@ -24,7 +24,7 @@ module.exports = {
   },
 
   create: function(req, res) {
-    var obj = {
+    var item = {
       data:     req.param('data'),
       model:    req.param('model'),
       summary:  req.param('summary'),
@@ -32,18 +32,14 @@ module.exports = {
       agent:    req.param('agent')
     }
 
-    ContactHistory
-      .create(obj)
-      .then(function(contactHistory) {
-        res.redirect('/contactHistory/show/' + contactHistory.id);
-      })
-      .catch(function(err) {
-        req.session.flash = {
-          err: err
-        }
-        res.redirect('/contactHistory/new');
-      })
-      .done();
+    ContactHistoryFacade.add(item, function success(item) {
+      res.redirect('/contactHistory/show/' + item.id);
+    }, function error(err) {
+      req.session.flash = {
+        err: err
+      };
+      res.redirect('/contactHistory/new');
+    });
   },
 
   show: function(req, res, next) {

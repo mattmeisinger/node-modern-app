@@ -24,7 +24,7 @@ module.exports = {
   },
 
   create: function(req, res) {
-    var paramObj = {
+    var item = {
       firstName: req.param('firstName'),
       lastName:  req.param('lastName'),
       email:     req.param('email'),
@@ -32,17 +32,12 @@ module.exports = {
       agent:     req.param('agent')
     }
 
-    Customer.create(paramObj)
-      .then(function(customer) {
-        res.redirect('/customer/show/' + customer.id);
-      })
-      .catch(function(err) {
-        req.session.flash = {
-          err: err
-        }
-        res.redirect('/customer/new');
-      })
-      .done();
+    CustomerFacade.add(item, function success(item) {
+      res.redirect('/customer/show/' + item.id);
+    }, function error(err) {
+      req.session.flash = { err: err };
+      res.redirect('/customer/new');
+    });
   },
 
   show: function(req, res, next) {

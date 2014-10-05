@@ -32,9 +32,9 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': {
-    view: 'homepage'
-  }
+  // '/': {
+  //   view: 'homepage'
+  // }
 
   /***************************************************************************
   *                                                                          *
@@ -45,5 +45,11 @@ module.exports.routes = {
   * for configuration options and examples.                                  *
   *                                                                          *
   ***************************************************************************/
+
+  'get    /agent':     'AgentController.get',
+  'get    /agent/:id': 'AgentController.get',
+  'post   /agent':     'AgentController.post',
+  'put    /agent/:id': 'AgentController.put',
+  'delete /agent/:id': 'AgentController.delete'
 
 };

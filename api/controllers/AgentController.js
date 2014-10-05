@@ -5,107 +5,76 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
+var AgentFacade = require('../BusinessService/AgentFacade');
+
 module.exports = {
 
-  'new': function(req,res){
-    res.view();
+  get: function(req, res) {
+    var id = req.param('id');
+    if (id > 0) {
+      AgentFacade.get(id)
+        .then(function (item) {
+          if (!item) res.send(400, { error: 'Bad request' });
+          res.json(item);
+        })
+        .fail(function (err) {
+          res.send(500, {error: 'An unexpected error occurred.'});
+        });
+    }
+    else {
+      AgentFacade.getAll()
+        .then(function(agents) {
+          res.json(agents);
+        })
+        .fail(function(err) {
+          res.send(500, {error: 'An unexpected error occurred.'});
+        });
+    }
   },
 
-  create: function(req, res) {
-    var paramObj = {
+  post: function(req, res) {
+    var item = {
       firstName: req.param('firstName'),
       lastName:  req.param('lastName'),
       email:     req.param('email'),
       phone:     req.param('phone')
-    }
+    };
 
-    Agent
-      .create(paramObj)
-      .then(function(agent) {
-        res.redirect('/agent/show/' + agent.id);
-      })
-      .catch(function(err) {
-        req.session.flash = {
-          err: err
-        }
-        res.redirect('/agent/new');
-      })
-      .done();
-  },
-
-  show: function(req, res, next) {
-    Agent
-      .findOne(req.param('id'))
-      .populate('customers')
-      .then(function(agent) {
-        if (!agent) throw new Error('Agent doesn\'t exist.');
-        res.view({ agent: agent });
+    AgentFacade.save(item)
+      .then(function (item) {
+        res.send(200, item);
       })
       .fail(function(err) {
-        return next(err);
-      })
-      .done();
-  },
-
-  index: function(req, res, next) {
-    Agent
-      .find()
-      .populate('customers')
-      .then(function(agents) {
-        res.view({ agents: agents });
-      })
-      .catch(function(err) {
-        return next(err);
-      })
-      .done();
-  },
-
-  edit: function(req, res, next) {
-    Agent
-      .findOne(req.param('id'))
-      .populate('customers')
-      .then(function(agent) {
-        if (!agent) throw new Error('Agent doesn\'t exist.');
-        res.view({ agent: agent });
-      })
-      .fail(function(err) {
-        return next(err);
-      })
-      .done();
-  },
-
-  update: function(req, res, next) {
-    var paramObj = {
-      firstName: req.param('firstName'),
-      lastName:  req.param('lastName'),
-      email:     req.param('email'),
-      phone:     req.param('phone')
-    }
-
-    Agent
-      .update(req.param('id'), paramObj)
-      .fail(function(err) {
-        req.session.flash = {
-          err: err
-        };
-        res.redirect('/agent/edit/' + req.param('id'));
-      })
-      .done(function() {
-        res.redirect('/agent/show/' + req.param('id'));
+        res.send(500, { error: 'An unexpected error occurred.' });
       });
   },
 
-  destroy: function(req, res, next) {
-    Agent.findOne(req.param('id'))
-      .then(function (agent) {
-        if (!agent) throw new Error('Agent doesn\'t exist.');
-        return Agent.destroy(req.param('id'));
+  put: function(req, res) {
+    var item = {
+      id:        req.param('id'),
+      firstName: req.param('firstName'),
+      lastName:  req.param('lastName'),
+      email:     req.param('email'),
+      phone:     req.param('phone')
+    };
+
+    AgentFacade.save(item)
+      .then(function (item) {
+        res.send(200, item);
       })
       .fail(function(err) {
-        return next(err);
+        res.send(500, { error: 'An unexpected error occurred.' });
+      });
+  },
+
+  delete: function(req, res) {
+    var id = req.param('id');
+    AgentFacade.delete(id)
+      .then(function () {
+        res.send(200);
       })
-      .done(function() {
-        res.redirect('/agent');
+      .fail(function(err) {
+        res.send(500, { error: 'An unexpected error occurred.' });
       });
   }
 };

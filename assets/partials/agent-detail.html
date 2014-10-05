@@ -1,0 +1,32 @@
+<div class="form-group">
+
+  <h2>Edit Agent</h2>
+
+  <ul class="alert alert-success" ng-show="messages">
+    <li ng-repeat="message in messages">{{message}}</li>
+  </ul>
+
+  <div class="form-group" style="width: 400px;">
+    <label>First Name</label>
+    <input ng-model="item.firstName" type="text" class="form-control"/>
+  </div>
+
+  <div class="form-group" style="width: 400px;">
+    <label>Last Name</label>
+    <input ng-model="item.lastName" type="text" class="form-control"/>
+  </div>
+
+  <div class="form-group" style="width: 400px;">
+    <label>Email</label>
+    <input ng-model="item.email" type="text" class="form-control"/>
+  </div>
+
+  <div class="form-group" style="width: 400px;">
+    <label>Phone</label>
+    <input ng-model="item.phone" type="text" class="form-control"/>
+  </div>
+
+</div>
+
+<a href="" ng-click="save(item)" class="btn btn-default">Save</a>
+<a href="#/Agent" class="btn btn-danger">Cancel</a>
