@@ -1,18 +1,20 @@
 
 module.exports = {
 	getAll: function() {
-		
+    return CustomerHistory.find().populate('agent').populate('customer');
 	},
 	get: function(id) {
-
+		return CustomerHistory.findOne(id).populate('agent').populate('customer');
 	},
-	add: function(item) {
-
+	save: function(item) {
+		if (item.id > 0) {
+			return CustomerHistory.update(item.id, item);
+		}
+		else {
+			return CustomerHistory.create(item);
+		}
 	},
-	update: function(item) {
-
-	},
-	remove: function(id) {
-
+	delete: function(id) {
+		return CustomerHistory.destroy(id);
 	}
 };

@@ -50,6 +50,18 @@ module.exports.routes = {
   'get    /agent/:id': 'AgentController.get',
   'post   /agent':     'AgentController.post',
   'put    /agent/:id': 'AgentController.put',
-  'delete /agent/:id': 'AgentController.delete'
+  'delete /agent/:id': 'AgentController.delete',
+
+  'get    /customer':     'CustomerController.get',
+  'get    /customer/:id': 'CustomerController.get',
+  'post   /customer':     'CustomerController.post',
+  'put    /customer/:id': 'CustomerController.put',
+  'delete /customer/:id': 'CustomerController.delete',
+
+  'get    /contactHistory':     'ContactHistoryController.get',
+  'get    /contactHistory/:id': 'ContactHistoryController.get',
+  'post   /contactHistory':     'ContactHistoryController.post',
+  'put    /contactHistory/:id': 'ContactHistoryController.put',
+  'delete /contactHistory/:id': 'ContactHistoryController.delete'
 
 };

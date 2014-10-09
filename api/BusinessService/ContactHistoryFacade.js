@@ -2,19 +2,16 @@
 var CRMService = require('./CRMService');
 
 module.exports = {
-	getAll: function(success, err) {
-		CRMService.contactHistory.getAll(success, err);
+	getAll: function() {
+		return CRMService.contactHistory.getAll();
 	},
-	get: function(id, success, err) {
-		CRMService.contactHistory.get(id, success, err);
+	get: function(id) {
+		return CRMService.contactHistory.get(id);
 	},
-	add: function(item, success, err) {
-		CRMService.contactHistory.add(item, success, err);
+	save: function(item) {
+		return CRMService.contactHistory.save(item);
 	},
-	update: function(item, success, err) {
-		CRMService.contactHistory.update(item, success, err);
-	},
-	remove: function(id, success, err) {
-		CRMService.contactHistory.remove(id, success, err);
+	delete: function(id) {
+		return CRMService.contactHistory.delete(id);
 	}
 };

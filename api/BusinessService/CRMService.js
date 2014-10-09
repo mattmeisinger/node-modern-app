@@ -19,37 +19,31 @@ module.exports = {
 		}
 	},
 	customer: {
-		getAll: function(success, err) {
-			CustomerDS.getAll(success, err);
+		getAll: function() {
+			return CustomerDS.getAll();
 		},
-		get: function(id, success, err) {
-			CustomerDS.get(id, success, err);
+		get: function(id) {
+			return CustomerDS.get(id);
 		},
-		add: function(item, success, err) {
-			CustomerDS.add(item, success, err);
+		save: function(item) {
+			return CustomerDS.save(item);
 		},
-		update: function(item, success, err) {
-			CustomerDS.update(item, success, err);
-		},
-		remove: function(id, success, err) {
-			CustomerDS.remove(id, success, err);
+		delete: function(id) {
+			return CustomerDS.delete(id);
 		}
 	},
 	contactHistory: {
-		getAll: function(success, err) {
-			ContactHistoryDS.getAll(success, err);
+		getAll: function() {
+			return ContactHistoryDS.getAll();
 		},
-		get: function(id, success, err) {
-			ContactHistoryDS.get(id, success, err);
+		get: function(id) {
+			return ContactHistoryDS.get(id);
 		},
-		add: function(item, success, err) {
-			ContactHistoryDS.add(item, success, err);
+		save: function(item) {
+			return ContactHistoryDS.save(item);
 		},
-		update: function(item, success, err) {
-			ContactHistoryDS.update(item, success, err);
-		},
-		remove: function(id, success, err) {
-			ContactHistoryDS.remove(id, success, err);
+		delete: function(id) {
+			return ContactHistoryDS.delete(id);
 		}
 	}
 };

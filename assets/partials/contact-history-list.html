@@ -1,0 +1,27 @@
+<h3>Contact History Listing</h3>
+
+<table class='table table-hover table-condensed'>
+<thead>
+  <tr>
+    <th>Customer</th>
+    <th>Agent</th>
+    <th>Data</th>
+
+    <th></th>
+    <th></th>
+  </tr>
+</thead>
+<tbody>
+  <tr ng-repeat="item in items">
+    <td>{{ item.customer }}</td>
+    <td>{{ item.agent }}</td>
+    <td>{{ item.data }}</td>
+
+    <td><a href="#/ContactHistory/{{item.id}}" class="btn btn-primary btn-sm">Edit</a></td>
+    <td><a href="" class="btn btn-danger btn-sm" ng-click="delete(item)">Delete</a></td>
+  </tr>
+</tbody>
+</table>
+
+<a href="#/ContactHistory/0" class="btn btn-success btn-sm" role="button">New Contact History Item</a> |
+<a href="#/">Back</a>
