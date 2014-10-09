@@ -46,22 +46,22 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  'get    /agent':     'AgentController.get',
-  'get    /agent/:id': 'AgentController.get',
-  'post   /agent':     'AgentController.post',
-  'put    /agent/:id': 'AgentController.put',
-  'delete /agent/:id': 'AgentController.delete',
+  'get    /api/agent':     'AgentController.get',
+  'get    /api/agent/:id': 'AgentController.get',
+  'post   /api/agent':     'AgentController.post',
+  'put    /api/agent/:id': 'AgentController.put',
+  'delete /api/agent/:id': 'AgentController.delete',
 
-  'get    /customer':     'CustomerController.get',
-  'get    /customer/:id': 'CustomerController.get',
-  'post   /customer':     'CustomerController.post',
-  'put    /customer/:id': 'CustomerController.put',
-  'delete /customer/:id': 'CustomerController.delete',
+  'get    /api/customer':     'CustomerController.get',
+  'get    /api/customer/:id': 'CustomerController.get',
+  'post   /api/customer':     'CustomerController.post',
+  'put    /api/customer/:id': 'CustomerController.put',
+  'delete /api/customer/:id': 'CustomerController.delete',
 
-  'get    /contactHistory':     'ContactHistoryController.get',
-  'get    /contactHistory/:id': 'ContactHistoryController.get',
-  'post   /contactHistory':     'ContactHistoryController.post',
-  'put    /contactHistory/:id': 'ContactHistoryController.put',
-  'delete /contactHistory/:id': 'ContactHistoryController.delete'
+  'get    /api/contactHistory':     'ContactHistoryController.get',
+  'get    /api/contactHistory/:id': 'ContactHistoryController.get',
+  'post   /api/contactHistory':     'ContactHistoryController.post',
+  'put    /api/contactHistory/:id': 'ContactHistoryController.put',
+  'delete /api/contactHistory/:id': 'ContactHistoryController.delete'
 
 };
