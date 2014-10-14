@@ -10,8 +10,8 @@ crmControllers.controller('AgentListCtrl', ['$scope', '$http', 'Agent',
   	};
   }]);
 
-crmControllers.controller('AgentDetailCtrl', ['$scope', '$routeParams', '$location', 'Agent',
-  function ($scope, $routeParams, $location, Agent) {
+crmControllers.controller('AgentDetailCtrl', ['$scope', '$routeParams', '$location', '$http', 'Agent',
+  function ($scope, $routeParams, $location, $http, Agent) {
   	if ($routeParams.id > 0) {
   		// Gets existing item
 	  	$scope.item = Agent.get({id: $routeParams.id});

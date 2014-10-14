@@ -68,8 +68,13 @@ module.exports = {
     };
 
     ContactHistoryFacade.save(item)
-      .then(function (item) {
-        res.send(200, item);
+      .then(function (items) {
+        if (items.length === 1) {
+          res.send(200, items[0]);         
+        }
+        else {
+          res.send(500, { error: 'An unexpected error occurred.' });
+        }
       })
       .fail(function(err) {
         res.send(500, { error: 'An unexpected error occurred.' });

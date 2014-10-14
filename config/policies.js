@@ -28,6 +28,10 @@ module.exports.policies = {
 
   // '*': true,
 
+  AgentController: {
+    '*': 'validateNonce'
+  }
+
   /***************************************************************************
   *                                                                          *
   * Here's an example of mapping some policies to run before a controller    *
