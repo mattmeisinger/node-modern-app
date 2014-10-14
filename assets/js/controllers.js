@@ -2,12 +2,17 @@ var crmControllers = angular.module('crmControllers', []);
 
 crmControllers.controller('AgentListCtrl', ['$scope', '$http', 'Agent',
   function ($scope, $http, Agent) {
-  	$scope.items = Agent.getAll();
+    $scope.page = 1;
+  	$scope.results = Agent.getAll({page:$scope.page});
   	$scope.delete = function (item) {
   		item.$delete(function () {
-        $scope.items = Agent.getAll();
+        $scope.results = Agent.getAll({page:$scope.page});
       });
   	};
+    $scope.setPage = function (page) {
+      $scope.page = page;
+      $scope.results = Agent.getAll({page:$scope.page});
+    };
   }]);
 
 crmControllers.controller('AgentDetailCtrl', ['$scope', '$routeParams', '$location', '$http', 'Agent',
@@ -34,11 +39,16 @@ crmControllers.controller('AgentDetailCtrl', ['$scope', '$routeParams', '$locati
 
 crmControllers.controller('CustomerListCtrl', ['$scope', '$http', 'Customer',
   function ($scope, $http, Customer) {
-    $scope.items = Customer.getAll();
+    $scope.page = 1;
+    $scope.results = Customer.getAll({page:$scope.page});
     $scope.delete = function (item) {
       item.$delete(function () {
-        $scope.items = Customer.getAll();
+        $scope.results = Customer.getAll({page:$scope.page});
       });
+    };
+    $scope.setPage = function (page) {
+      $scope.page = page;
+      $scope.results = Customer.getAll({page:$scope.page});
     };
   }]);
 
@@ -67,11 +77,16 @@ crmControllers.controller('CustomerDetailCtrl', ['$scope', '$routeParams', '$loc
 
 crmControllers.controller('ContactHistoryListCtrl', ['$scope', '$http', 'ContactHistory',
   function ($scope, $http, ContactHistory) {
-    $scope.items = ContactHistory.getAll();
+    $scope.page = 1;
+    $scope.results = ContactHistory.getAll({page:$scope.page});
     $scope.delete = function (item) {
       item.$delete(function () {
-        $scope.items = ContactHistory.getAll();
+        $scope.results = ContactHistory.getAll({page:$scope.page});
       });
+    };
+    $scope.setPage = function (page) {
+      $scope.page = page;
+      $scope.results = ContactHistory.getAll({page:$scope.page});
     };
   }]);
 

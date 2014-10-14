@@ -12,7 +12,7 @@
   </tr>
 </thead>
 <tbody>
-  <tr ng-repeat="item in items">
+  <tr ng-repeat="item in results.items">
     <td>{{ item.customer }}</td>
     <td>{{ item.agent }}</td>
     <td>{{ item.data }}</td>
@@ -22,6 +22,12 @@
   </tr>
 </tbody>
 </table>
+
+<div style="text-align: center">
+  <a ng-show="results.meta.prevUri" href="" ng-click="setPage(page-1)">Previous</a>
+  -- Page {{page}} --
+  <a ng-show="results.meta.nextUri" href="" ng-click="setPage(page+1)">Next</a>
+</div>
 
 <a href="#/ContactHistory/0" class="btn btn-success btn-sm" role="button">New Contact History Item</a> |
 <a href="#/">Back</a>

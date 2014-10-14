@@ -1,20 +1,20 @@
 
 module.exports = {
 	getAll: function() {
-    return CustomerHistory.find().populate('agent').populate('customer');
+		return ContactHistory.find().populate('agent').populate('customer');
 	},
 	get: function(id) {
-		return CustomerHistory.findOne(id).populate('agent').populate('customer');
+		return ContactHistory.findOne(id).populate('agent').populate('customer');
 	},
 	save: function(item) {
 		if (item.id > 0) {
-			return CustomerHistory.update(item.id, item);
+			return ContactHistory.update(item.id, item);
 		}
 		else {
-			return CustomerHistory.create(item);
+			return ContactHistory.create(item);
 		}
 	},
 	delete: function(id) {
-		return CustomerHistory.destroy(id);
+		return ContactHistory.destroy(id);
 	}
 };

@@ -8,7 +8,7 @@
  */
 module.exports = function(req, res, next) {
 
-  var sails = req._sails;
+  	var sails = req._sails;
 
 	// Initialize empty list of used nonces if the list doesn't exist 
 	// yet (i.e. this is the first request). This list is kept in-memory in

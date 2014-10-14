@@ -33,7 +33,7 @@ crmApp.config(['$routeProvider', '$httpProvider',
 				controller: 'ContactHistoryListCtrl'
 			}).
 			when('/ContactHistory/:id', {
-				templateUrl: 'partials/cotact-history-detail.html',
+				templateUrl: 'partials/contact-history-detail.html',
 				controller: 'ContactHistoryDetailCtrl'
 			}).
 			otherwise({

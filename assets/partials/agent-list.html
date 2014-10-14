@@ -13,7 +13,7 @@
   </tr>
 </thead>
 <tbody>
-  <tr ng-repeat="item in items">
+  <tr ng-repeat="item in results.items">
     <td>{{ item.firstName }}</td>
     <td>{{ item.lastName }}</td>
     <td>{{ item.email }}</td>
@@ -24,6 +24,12 @@
   </tr>
 </tbody>
 </table>
+
+<div style="text-align: center">
+  <a ng-show="results.meta.prevUri" href="" ng-click="setPage(page-1)">Previous</a>
+  -- Page {{page}} --
+  <a ng-show="results.meta.nextUri" href="" ng-click="setPage(page+1)">Next</a>
+</div>
 
 <a href="#/Agent/0" class="btn btn-success btn-sm" role="button">New Agent</a> |
 <a href="#/">Back</a>

@@ -7,6 +7,7 @@
 
 var Q = require('q');
 var CustomerFacade = require('../BusinessService/CustomerFacade');
+var PAGE_LENGTH = 2;
 
 module.exports = {
 
@@ -24,15 +25,35 @@ module.exports = {
           res.json(item);
         })
         .fail(function (err) {
+          req._sails.log.error(err);
           res.send(500, {error: 'An unexpected error occurred.'});
         });
     }
     else {
+      var page = parseInt(req.param('page') || 1);
       CustomerFacade.getAll()
-        .then(function(agents) {
-          res.json(agents);
+        .then(function(items) {
+          var nextUri = null;
+          var prevUri = null;
+          var nextPage = page+1;
+          var prevPage = page-1;
+          if (items.length > page * PAGE_LENGTH) {
+            nextUri = '/api/agent?page=' + nextPage;
+          }
+          if (page > 1) {
+            prevUri = '/api/agent?page=' + prevPage;
+          }
+          res.json({
+            items: items.slice(prevPage*PAGE_LENGTH, page*PAGE_LENGTH),
+            meta: {
+              page: page,
+              nextUri: nextUri,
+              prevUri: prevUri
+            }
+          });
         })
         .fail(function(err) {
+          req._sails.log.error(err);
           res.send(500, {error: 'An unexpected error occurred.'});
         });
     }
@@ -52,6 +73,7 @@ module.exports = {
         res.send(200, item);
       })
       .fail(function(err) {
+        req._sails.log.error(err);
         res.send(500, { error: 'An unexpected error occurred.' });
       });
   },
@@ -76,6 +98,7 @@ module.exports = {
         }
       })
       .fail(function(err) {
+        req._sails.log.error(err);
         res.send(500, { error: 'An unexpected error occurred.' });
       });
   },
@@ -87,6 +110,7 @@ module.exports = {
         res.send(200);
       })
       .fail(function(err) {
+        req._sails.log.error(err);
         res.send(500, { error: 'An unexpected error occurred.' });
       });
   }
