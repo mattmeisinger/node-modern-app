@@ -3,12 +3,12 @@ var crmControllers = angular.module('crmControllers', []);
 crmControllers.controller('AgentListCtrl', ['$scope', '$http', 'Agent',
   function ($scope, $http, Agent) {
     $scope.page = 1;
-  	$scope.results = Agent.getAll({page:$scope.page});
-  	$scope.delete = function (item) {
-  		item.$delete(function () {
+    $scope.results = Agent.getAll({page:$scope.page});
+    $scope.delete = function (item) {
+      item.$delete(function () {
         $scope.results = Agent.getAll({page:$scope.page});
       });
-  	};
+    };
     $scope.setPage = function (page) {
       $scope.page = page;
       $scope.results = Agent.getAll({page:$scope.page});
@@ -17,24 +17,36 @@ crmControllers.controller('AgentListCtrl', ['$scope', '$http', 'Agent',
 
 crmControllers.controller('AgentDetailCtrl', ['$scope', '$routeParams', '$location', '$http', 'Agent',
   function ($scope, $routeParams, $location, $http, Agent) {
-  	if ($routeParams.id > 0) {
-  		// Gets existing item
-	  	$scope.item = Agent.get({id: $routeParams.id});
-  	}
-  	else {
-  		// New item
-  		$scope.item = {};
-  	}
-		$scope.save = function (item) {
-			if (item.id) {
-				item.$save();
-			}
-			else {
-				var a = Agent.saveNew(item, function (item) {
-					$location.path("/Agent/" + item.id);					
-				});
-			}
-		};
+    if ($routeParams.id > 0) {
+      // Gets existing item
+      $scope.item = Agent.get({id: $routeParams.id});
+    }
+    else {
+      // New item
+      $scope.item = {};
+    }
+    $scope.save = function (item) {
+      if (item.id) {
+        item.$save(
+          function success() {
+            $scope.messages = ['Record saved.'];
+          }, 
+          function error(e) {
+            $scope.messages = ['Error saving: ' + e.data];
+          }
+        );
+      }
+      else {
+        var a = Agent.saveNew(item, 
+          function success(item) {
+            $location.path("/Agent/" + item.id);          
+          },
+          function error(e) {
+            $scope.messages = ['Error saving: ' + e.data];
+          }
+        );
+      }
+    };
   }]);
 
 crmControllers.controller('CustomerListCtrl', ['$scope', '$http', 'Customer',
@@ -65,12 +77,24 @@ crmControllers.controller('CustomerDetailCtrl', ['$scope', '$routeParams', '$loc
     }
     $scope.save = function (item) {
       if (item.id) {
-        item.$save();
+        item.$save(
+          function success() {
+            $scope.messages = ['Record saved.'];
+          }, 
+          function error(e) {
+            $scope.messages = ['Error saving: ' + e.data];
+          }
+        );
       }
       else {
-        var a = Customer.saveNew(item, function (item) {
-          $location.path("/Customer/" + item.id);          
-        });
+        var a = Customer.saveNew(item,
+          function success(item) {
+            $location.path("/Customer/" + item.id);          
+          },
+          function error(e) {
+            $scope.messages = ['Error saving: ' + e.data];
+          }
+        );
       }
     };
   }]);
@@ -106,12 +130,24 @@ crmControllers.controller('ContactHistoryDetailCtrl', ['$scope', '$routeParams',
     }
     $scope.save = function (item) {
       if (item.id) {
-        item.$save();
+        item.$save(
+          function success() {
+            $scope.messages = ['Record saved.'];
+          }, 
+          function error(e) {
+            $scope.messages = ['Error saving: ' + e.data];
+          }
+        );
       }
       else {
-        var a = ContactHistory.saveNew(item, function (item) {
-          $location.path("/ContactHistory/" + item.id);          
-        });
+        var a = ContactHistory.saveNew(item,
+          function success(item) {
+            $location.path("/ContactHistory/" + item.id);          
+          },
+          function error(e) {
+            $scope.messages = ['Error saving: ' + e.data];
+          }
+        );
       }
     };
   }]);
