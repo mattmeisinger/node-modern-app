@@ -37,20 +37,25 @@ module.exports = {
 			// If attempting to assign this customer to an agent who has 5 other customers already, throw error.
 			if (item.agent) {
 				console.log("Agent found.");
-				var checkAgentCustomerLimit = AgentDS.get(item.agent, function (agent) {
-					console.log("Retrieved customer's agent, checking agent's customer limit.");
-					if (agent.state !== 'TX' && agent.state !== 'NY') {
-						var otherCustomers = 0;
-						agent.customers.forEach(function () {
-							if (this.id !== item.id) {
-								otherCustomers++;
-								if (otherCustomers == 5) {
-									throw 'Agent already has 5 other customers. Each agent can have at most 5 customers.';
+				var checkAgentCustomerLimit = AgentDS.get(item.agent)
+					.then(function (agent) {
+						console.log("Retrieved customer's agent, checking agent's customer limit.");
+						if (agent.state !== 'TX' && agent.state !== 'NY') {
+							var otherCustomers = 0;
+							agent.customers.forEach(function () {
+								if (this.id !== item.id) {
+									otherCustomers++;
 								}
+							});
+							if (otherCustomers >= 5) {
+								console.log("Agent has " + otherCustomers + " other customers assigned to them (more than the limit of 5). Save cancelled.");
+								throw 'Agent already has 5 other customers. Each agent can have at most 5 customers.';
 							}
-						});
-					}
-				});
+							else {
+								console.log("Agent has " + otherCustomers + " other customers assigned to them (less than the limit of 5).");
+							}
+						}
+					});
 				validationChecks.push(checkAgentCustomerLimit);
 			}
 

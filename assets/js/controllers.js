@@ -32,7 +32,7 @@ crmControllers.controller('AgentDetailCtrl', ['$scope', '$routeParams', '$locati
             $scope.messages = ['Record saved.'];
           }, 
           function error(e) {
-            $scope.messages = ['Error saving: ' + e.data];
+            $scope.messages = ['Error saving: ' + e.data.error];
           }
         );
       }
@@ -42,7 +42,7 @@ crmControllers.controller('AgentDetailCtrl', ['$scope', '$routeParams', '$locati
             $location.path("/Agent/" + item.id);          
           },
           function error(e) {
-            $scope.messages = ['Error saving: ' + e.data];
+            $scope.messages = ['Error saving: ' + e.data.error];
           }
         );
       }
@@ -85,7 +85,7 @@ crmControllers.controller('CustomerDetailCtrl', ['$scope', '$routeParams', '$loc
             // console.log($scope.item.agentId);
           }, 
           function error(e) {
-            $scope.messages = ['Error saving: ' + e.data];
+            $scope.messages = ['Error saving: ' + e.data.error];
           }
         );
       }
@@ -95,7 +95,7 @@ crmControllers.controller('CustomerDetailCtrl', ['$scope', '$routeParams', '$loc
             $location.path("/Customer/" + item.id);          
           },
           function error(e) {
-            $scope.messages = ['Error saving: ' + e.data];
+            $scope.messages = ['Error saving: ' + e.data.error];
           }
         );
       }
@@ -138,7 +138,7 @@ crmControllers.controller('ContactHistoryDetailCtrl', ['$scope', '$routeParams',
             $scope.messages = ['Record saved.'];
           }, 
           function error(e) {
-            $scope.messages = ['Error saving: ' + e.data];
+            $scope.messages = ['Error saving: ' + e.data.error];
           }
         );
       }
@@ -148,7 +148,7 @@ crmControllers.controller('ContactHistoryDetailCtrl', ['$scope', '$routeParams',
             $location.path("/ContactHistory/" + item.id);          
           },
           function error(e) {
-            $scope.messages = ['Error saving: ' + e.data];
+            $scope.messages = ['Error saving: ' + e.data.error];
           }
         );
       }

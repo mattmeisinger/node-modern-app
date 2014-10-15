@@ -102,7 +102,7 @@ module.exports = {
           // assignment can be changed.
           item.agentId = item.agent;
 
-          res.send(200, item);         
+          res.send(200, item);
         }
         else {
           res.send(500, { error: 'An unexpected error occurred.' });
@@ -110,7 +110,7 @@ module.exports = {
       })
       .fail(function(err) {
         req._sails.log.error(err);
-        res.send(500, { error: 'An unexpected error occurred.' });
+        res.send(500, { error: err });
       });
   },
 
