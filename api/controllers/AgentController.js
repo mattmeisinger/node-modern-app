@@ -27,11 +27,16 @@ module.exports = {
       var page = parseInt(req.param('page') || 1);
       AgentFacade.getAll()
         .then(function(items) {
+          // If no page is specified, return entire list of items
+          if (!req.param('page')) {
+            res.json({items: items});
+            return;
+          }
           var nextUri = null;
           var prevUri = null;
           var nextPage = page+1;
           var prevPage = page-1;
-          if (items.length > page * PAGE_LENGTH) {
+          if (page != -1 && items.length > page * PAGE_LENGTH) {
             nextUri = '/api/agent?page=' + nextPage;
           }
           if (page > 1) {

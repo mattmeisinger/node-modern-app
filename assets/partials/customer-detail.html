@@ -28,7 +28,7 @@
 
   <div class="form-group" style="width: 400px;">
     <label>Agent</label>
-    <select ng-options="a.id as (a.firstName + ' ' + a.lastName) for a in agents" ng-model="item.agentId" class="form-control"></select>
+    <select ng-options="a.id as (a.firstName + ' ' + a.lastName) for a in agents.items" ng-model="item.agentId" class="form-control"></select>
   </div>
 
 </div>

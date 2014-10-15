@@ -78,8 +78,11 @@ crmControllers.controller('CustomerDetailCtrl', ['$scope', '$routeParams', '$loc
     $scope.save = function (item) {
       if (item.id) {
         item.$save(
-          function success() {
+          function success(item) {
             $scope.messages = ['Record saved.'];
+            // $scope.item.agentId = item.agent;
+            // console.log(typeof item.agent);
+            // console.log($scope.item.agentId);
           }, 
           function error(e) {
             $scope.messages = ['Error saving: ' + e.data];

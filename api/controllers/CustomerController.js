@@ -33,6 +33,11 @@ module.exports = {
       var page = parseInt(req.param('page') || 1);
       CustomerFacade.getAll()
         .then(function(items) {
+          // If no page is specified, return entire list of items
+          if (!req.param('page')) {
+            res.json({items: items});
+            return;
+          }
           var nextUri = null;
           var prevUri = null;
           var nextPage = page+1;
@@ -91,7 +96,13 @@ module.exports = {
     CustomerFacade.save(item)
       .then(function (items) {
         if (items.length === 1) {
-          res.send(200, items[0]);         
+          var item = items[0];
+
+          // Need to pass an agentId property to the browser so the agent
+          // assignment can be changed.
+          item.agentId = item.agent;
+
+          res.send(200, item);         
         }
         else {
           res.send(500, { error: 'An unexpected error occurred.' });
