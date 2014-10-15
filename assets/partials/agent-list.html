@@ -7,6 +7,7 @@
     <th>Last Name</th>
     <th>Email</th>
     <th>Phone</th>
+    <th>State</th>
 
     <th></th>
     <th></th>
@@ -18,6 +19,7 @@
     <td>{{ item.lastName }}</td>
     <td>{{ item.email }}</td>
     <td>{{ item.phone }}</td>
+    <td>{{ item.state }}</td>
 
     <td><a href="#/Agent/{{item.id}}" class="btn btn-primary btn-sm">Edit</a></td>
     <td><a href="" class="btn btn-danger btn-sm" ng-click="delete(item)">Delete</a></td>

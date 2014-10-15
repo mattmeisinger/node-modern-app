@@ -17,13 +17,16 @@ util.inherits(Agent, Person);
 module.exports = {
 
   attributes: {
-    customers : {
+    customers: {
       collection: 'customer',
-      via: 'agent'
+      via       : 'agent'
     },
     contactHistory: {
       collection: 'contactHistory',
       via       : 'agent'
+    },
+    state: {
+      type: 'string'
     }
   }
 

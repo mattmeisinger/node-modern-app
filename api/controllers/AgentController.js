@@ -58,7 +58,8 @@ module.exports = {
       firstName: req.param('firstName'),
       lastName:  req.param('lastName'),
       email:     req.param('email'),
-      phone:     req.param('phone')
+      phone:     req.param('phone'),
+      state:     req.param('state')
     };
 
     AgentFacade.save(item)
@@ -77,7 +78,8 @@ module.exports = {
       firstName: req.param('firstName'),
       lastName:  req.param('lastName'),
       email:     req.param('email'),
-      phone:     req.param('phone')
+      phone:     req.param('phone'),
+      state:     req.param('state')
     };
 
     AgentFacade.save(item)

@@ -2,7 +2,7 @@
 
   <h2>Edit Agent</h2>
 
-  <ul class="alert alert-success" ng-show="messages">
+  <ul class="alert alert-error" ng-show="messages">
     <li ng-repeat="message in messages">{{message}}</li>
   </ul>
 
@@ -24,6 +24,11 @@
   <div class="form-group" style="width: 400px;">
     <label>Phone</label>
     <input ng-model="item.phone" type="text" class="form-control"/>
+  </div>
+
+  <div class="form-group" style="width: 400px;">
+    <label>State</label>
+    <input ng-model="item.state" type="text" class="form-control"/>
   </div>
 
 </div>
