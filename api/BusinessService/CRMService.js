@@ -32,7 +32,7 @@ module.exports = {
 			// validation checks and catch an error if any one of the checks fails.
 			var validationChecks = [];
 
-			// Business rule: 
+			// Business rule #1
 			// Agents in the USA, except those in TX and NY can have at most 5 customers.
 			// If attempting to assign this customer to an agent who has 5 other customers already, throw error.
 			if (item.agent) {
@@ -58,7 +58,7 @@ module.exports = {
 				validationChecks.push(checkAgentCustomerLimit);
 			}
 
-			// Business rule: 
+			// Business rule #2
 			// A customer can only update their contact information once/week, unless their agent is in MN or CT.
 			// Their 'Contact Information' consists of their first name, last name, email, and phone, and does not
 			// include their agent.
@@ -81,7 +81,7 @@ module.exports = {
 							// If customer updated less than 7 days ago, throw an error
 							console.log("Checking if customer is updating their address more than once a week. Last updated their contact info at: " + customer.updatedContactInfoAt);
 							var sevenDaysAgo = new Date(new Date().setDate((new Date().getDate())-7));
-							console.log("Last updated: " + new Date(customer.updatedContactInfoAt));
+							console.log("Last updated:   " + new Date(customer.updatedContactInfoAt));
 							console.log("Seven days ago: " + sevenDaysAgo);
 							if (new Date(customer.updatedContactInfoAt) > sevenDaysAgo) {
 								console.log("Customer updated less than 7 days ago. Save cancelled.");
@@ -96,9 +96,45 @@ module.exports = {
 			}
 
 
-			// Business rule: 
+			// Business rule #3
 			// Assigning a new agent to a customer is only allowed if there are no "contact records" less than 72 hours old.
+			if (item.id) {
+				var checkNoRecentContactRecordsIfAgentChange = Q.all([CustomerDS.get(item.id), ContactHistoryDS.getAll()])
+					.spread(function(customer, contactHistory) {
+						console.log('After spread');
+						console.log(customer);
+						console.log(contactHistory);
+						// Check if the new record has an agent assigned, and if its different from the old record
+						var agentChanged = false;
+						if (item.agent && (!customer.agent || item.agent != customer.agent.id)) {
+							agentChanged = true;
+						}
+						console.log("Agent changed? : " + agentChanged.toString());
 
+						if (agentChanged) {
+							
+							// Check if any contact history record was modified within the last 72 hours
+							var contactRecordWithinLast72Hours = false;
+							contactHistory.forEach(function (ch) {
+								var hoursOld = dateDiffInHours(new Date(ch.createdAt), new Date());
+								console.log('Found contact history record ' + hoursOld + ' hours old.');
+								console.log(new Date(ch.createdAt));
+								if (hoursOld < 72) {
+									contactRecordWithinLast72Hours = true;
+								}
+							});
+
+							if (contactRecordWithinLast72Hours) {
+								console.log("Customer has a contact history record that was added within the last 72 hours. Cannot assign to new agent. Save cancelled.");
+								throw "Customer has a contact history record that was added within the last 72 hours. Cannot assign to new agent. Save cancelled.";
+							}
+							else {
+								console.log("Customer has no contact history records within the last 72 hours, so agent reassignment is okay.");
+							}
+						}
+					});
+				validationChecks.push(checkNoRecentContactRecordsIfAgentChange);
+			}
 
 			// Make sure all checks pass, then if they do, save the customer record.
 			console.log('Checking all ' + validationChecks.length + ' validation checks relevant to this customer.');
@@ -127,3 +163,17 @@ module.exports = {
 		}
 	}
 };
+
+
+
+// Helper function to calculate the difference in hours of two javascript dates.
+// Adapted from SO answer: http://stackoverflow.com/a/15289883
+function dateDiffInHours(a, b) {
+	var _MS_PER_HOUR = 1000 * 60 * 60;
+
+	// Discard the time and time-zone information.
+	var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+	var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+	return Math.floor((utc2 - utc1) / _MS_PER_HOUR);
+}
