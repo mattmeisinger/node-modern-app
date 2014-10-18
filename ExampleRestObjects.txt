@@ -1,0 +1,51 @@
+// Get all agents
+{
+  "method": "get",
+  "model": "Agent"
+}
+
+// Get specific agent.  Note that id may need to be changed.
+{
+  "method": "get",
+  "model": "Agent",
+  "data": {
+    "id": 9
+  }
+}
+
+// Post new agent
+{
+  "method": "post",
+  "model": "Agent",
+  "data": {
+    "email": "es@example.com",
+    "firstName": "Evan",
+    "lastName": "Schumann",
+    "phone": "0987654321",
+    "state": "Florida"
+  }
+}
+
+// Put agent.  Note that id may need to be changed.
+{
+  "method": "put",
+  "model": "Agent",
+  "data": {
+    "customers: [],
+    "email": "es@example.com",
+    "firstName": "Evan",
+    "id": 10,
+    "lastName": "Schumann",
+    "phone": "0987654321",
+    "state": "Florida"
+  }
+}
+
+// Delete agent.  Note that id may need to be changed.
+{
+  "method": "delete",
+  "model": "Agent",
+  "data": {
+    "id": 10
+  }
+}
