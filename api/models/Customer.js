@@ -17,7 +17,10 @@ util.inherits(Customer, Person);
 module.exports = {
 
   attributes: {
-    agent : {
+    updatedContactInfoAt: {
+      type: 'date'
+    },
+    agent: {
       model: 'agent'
     },
     contactHistory: {

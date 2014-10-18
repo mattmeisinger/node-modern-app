@@ -34,6 +34,11 @@ module.exports = {
       var page = parseInt(req.param('page') || 1);
       ContactHistoryFacade.getAll()
         .then(function(items) {
+          // If no page is specified, return entire list of items
+          if (!req.param('page')) {
+            res.json({items: items});
+            return;
+          }
           var nextUri = null;
           var prevUri = null;
           var nextPage = page+1;
@@ -92,7 +97,14 @@ module.exports = {
     ContactHistoryFacade.save(item)
       .then(function (items) {
         if (items.length === 1) {
-          res.send(200, items[0]);         
+          var item = items[0];
+
+          // Need to pass an agentId property to the browser so the agent
+          // assignment can be changed.
+          item.agentId = item.agent;
+          item.customerId = item.customer;
+
+          res.send(200, item);
         }
         else {
           req._sails.log.error(err);
