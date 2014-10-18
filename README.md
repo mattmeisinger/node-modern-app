@@ -4,7 +4,7 @@ a [Sails](http://sailsjs.org) application
 
 # Rest Client
 
-You'll need to create a file named 'aws.credentials.json' in the same directory as where you're executing this script.
+You'll need to create a file named 'aws.credentials.json' in the same directory as where you're executing the restClient.js script.
 
 The format of the file should be the following:
 
