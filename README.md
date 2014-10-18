@@ -3,6 +3,7 @@
 a [Sails](http://sailsjs.org) application
 
 # Rest Client
+## Getting started
 
 You'll need to create a file named 'aws.credentials.json' in the same directory as where you're executing the restClient.js script.
 
@@ -14,3 +15,6 @@ The format of the file should be the following:
  "region": "us-east-1"
 }
 
+## Adding to SQS
+
+You can add messages through Amazon's SQS service by selecting 'Send a Message' in the 'Queue Actions' dropdown.  Messages will follow formats like those seen in the ExampleRestObjects.txt file.
