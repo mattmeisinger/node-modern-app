@@ -1,6 +1,6 @@
-# crm
+# CRM
 
-a [Sails](http://sailsjs.org) application
+A simple [Sails](http://sailsjs.org) CRM application built using modern internet application development practices.
 
 # Rest Client
 ## Getting started

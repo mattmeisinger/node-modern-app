@@ -2,7 +2,7 @@
   "name": "crm",
   "private": true,
   "version": "0.0.0",
-  "description": "a Sails application",
+  "description": "Simple CRM Application built using modern internet application development practices.",
   "keywords": [],
   "dependencies": {
     "aws-sdk": "^2.0.17",
@@ -33,7 +33,7 @@
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/jmena/crm.git"
+    "url": "git://github.com/mattmeisinger/node-modern-app"
   },
   "author": "jmena",
   "license": ""
