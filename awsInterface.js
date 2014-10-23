@@ -63,7 +63,7 @@ module.exports = (function() {
     return deferred.promise;
   }
 
-  function deleteMessage(message, deferred) {
+  function deleteMessage(message) {
 
     var deferred = Q.defer();
 

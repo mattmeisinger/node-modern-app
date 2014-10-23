@@ -1,7 +1,6 @@
 module.exports = (function() {
   'use strict';
 
-  // TODO - Move AWS functionality and REST functionality into separate modules
   // TODO - Add support for pagination
   // TODO - Create either a single config file, provide commandline argument support, or allow setting through object returned by require.
 
@@ -19,7 +18,7 @@ module.exports = (function() {
     'delete': client.delete
   };
 
-  function makeRestCall(params, nonce, message, deferred) {
+  function makeRestCall(params, nonce, message) {
 
     var args,
         clientMethod,
@@ -62,6 +61,7 @@ module.exports = (function() {
     clientMethod(url, args, function(data, response) {
 
       if (response.statusCode === 200) {
+        console.log(data);
         console.log('REST call successful.  Deleting message.');
         deferred.resolve(response);
       } else if (response.statusCode === 400 && data === 'Duplicate nonce received.') {
