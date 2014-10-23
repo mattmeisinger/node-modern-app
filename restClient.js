@@ -1,9 +1,9 @@
 (function() {
   'use strict';
 
-  // TODO - Move AWS functionality and REST functionality into separate modules
   // TODO - Add support for pagination
   // TODO - Create either a single config file, provide commandline argument support, or allow setting through object returned by require.
+  // TODO - Move logging out of awsInterface and restInterface and into restClient
 
   var awsInterface = require('./awsInterface'),
       restInterface = require('./restInterface'),
