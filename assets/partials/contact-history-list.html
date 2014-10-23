@@ -13,8 +13,8 @@
 </thead>
 <tbody>
   <tr ng-repeat="item in results.items">
-    <td>{{ item.customer }}</td>
-    <td>{{ item.agent }}</td>
+    <td>{{ formatName(item.customer) }}</td>
+    <td>{{ formatName(item.agent) }}</td>
     <td>{{ item.data }}</td>
 
     <td><a href="#/ContactHistory/{{item.id}}" class="btn btn-primary btn-sm">Edit</a></td>

@@ -19,7 +19,7 @@
     <td>{{ item.lastName }}</td>
     <td>{{ item.email }}</td>
     <td>{{ item.phone }}</td>
-    <td>{{ item.agent }}</td>
+    <td>{{ formatName(item.agent) }}</td>
 
     <td><a href="#/Customer/{{item.id}}" class="btn btn-primary btn-sm">Edit</a></td>
     <td><a href="" class="btn btn-danger btn-sm" ng-click="delete(item)">Delete</a></td>

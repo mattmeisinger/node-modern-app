@@ -1,5 +1,14 @@
 var crmControllers = angular.module('crmControllers', []);
 
+
+crmControllers.run(['$rootScope', function($rootScope) {
+    $rootScope.formatName = function (person) {
+      // This function takes an object that has firstName and lastName 
+      // properties, and formats a string using them.
+      return person.lastName + ', ' + person.firstName;
+    };
+  }]);
+
 crmControllers.controller('AgentListCtrl', ['$scope', '$http', 'Agent',
   function ($scope, $http, Agent) {
     $scope.page = 1;
