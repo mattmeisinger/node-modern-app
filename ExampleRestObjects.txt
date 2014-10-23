@@ -31,7 +31,7 @@
   "method": "put",
   "model": "Agent",
   "data": {
-    "customers: [],
+    "customers": [],
     "email": "es@example.com",
     "firstName": "Evan",
     "id": 10,
