@@ -31,18 +31,21 @@ module.exports = {
     }
   },
 
-  afterCreate: function(insertedRecord, next) {
-    this.rabbitSend('customer.create', insertedRecord);
+  afterCreate: function(customer, next) {
+    var topic = ['customer', customer.id, 'create'].join('.');
+    this.rabbitSend(topic, customer);
     next();
   },
 
-  afterUpdate: function(updatedRecord, next) {
-    this.rabbitSend('customer.update', updatedRecord);
+  afterUpdate: function(customer, next) {
+    var topic = ['customer', customer.id, 'update'].join('.');
+    this.rabbitSend(topic, customer);
     next();
   },
 
-  afterDestroy: function(destroyedRecord, next) {
-    this.rabbitSend('customer.destroy', destroyedRecord);
+  afterDestroy: function(customer, next) {
+    var topic = ['customer', customer.id, 'destroy'].join('.');
+    this.rabbitSend(topic, customer);
     next();
   },
 
