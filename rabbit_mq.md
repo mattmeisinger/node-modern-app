@@ -11,7 +11,7 @@ delivered to Consumers based on their topic interest.
 
 For us this means:
 
-    CRM app  -> Exchange -> Notifications App
+    CRM app  --------> Exchange --------> Notifications App
 
 Our setup has a single exchange (there could be many) that receives messages of
 various topics from our CRM app and routes them to our notifications app to be
@@ -20,73 +20,105 @@ based on the topic of the message.
 
 Our topic hierarchy for customers will be as follows:
 
-                                  Customer
-                                     |
-         -----------------------------------------------------------
-        |        |         |         |         |         |         |
-    FirstName LastName   Email     Phone      Zip      Agent  ContactHistory
+                            CRM
+                             |
+                    --------------------
+                   |                    |
+                Customer              Agent
+                   |                    |
+                 Fields               Fields
 
 
 At every level of the topic tree, we have CUD operations—not for Retrieves,
 because it's not really useful in this context to get notifications when a
-customer is retrieved.
+customer or agent is retrieved.
+
+We'll be focusing on Customers for now but everything can be easily applied to
+Agents.
 
 Producer side
 =============
-On every CUD operation on Customer, a message is sent to Rabbit. Our messages
-have the following schema:
+On every CUD operation on Customer, the resulting object, serialized as JSON, is
+sent to Rabbit. All messages are tagged with the following topic schema:
 
-    <entity>.<id>.<operation>.<parameter>.<value>
+    <entity>.<id>.<operation>
 
 These can be:
 
 topic      | description
 -----------|----------------------------
- entity    | a customer or agent
+ entity    | customer or agent
  id        | id of the entity
  operation | create, update, delete
- parameter | Any parameter for the entity
- value     | The new value of the parameter
 
 ### Examples
-A Customer (with Id 10) in Zip 10027 is created:
+#### Example 1: A Customer (with Id 10) in Zip 10027 is created
 
-    customer.10.create.zip.10027
+Send message:
 
-Customer 5 Updates their Agent to 123:
+    { id: 10, name: "John", zip: "10027", state: "NY", agent: "3" }
 
-    customer.5.update.agent.123
+With topic:
 
-Sometimes it doesn't make sense to specify \<parameter> or \<value>. For example,
-when a customer is deleted:
+    customer.10.create
 
-    customer.2.delete
+#### Example 2: Customer 5 Updates their Agent to 123
+
+Send message:
+
+    { agent: "123" }
+
+With topic:
+
+    customer.5.update
+
+Notice that in this case we only send the parameter(s) that was updated.
+
+#### Example 3: Customer 5 is deleted from the system
+
+Send message:
+
+    { id: 5, name: "Olive", zip: "53371", state: "CA", agent: "123" }
+
+With topic:
+
+    customer.5.delete
 
 Consumer side
 =============
-The Notifications app will register to receive messages that it's interested in.
-This happens when a new subscription is created.
+To simplify the consumer process, we'll listen for all messages that get posted
+to the "customer.#" queue (i.e., all operations on customers).
 
-Here's a couple of examples of new Subscriptions:
+When a new message is received from rabbit, we'll perform a search for a
+subscription that matches the criteria.
 
 ### Example #1:
 
+A new subscription that contains the following parameters is created by Agent 1.
+
     Agent: 1
-    Customer: 9
-    Parameter: Zip code
-    Value:
-    Operation: Update
+    Customer:
+    Parameter: State
+    Value: NY
+    Operation: Create
     Notification: Push
 
-This represents SMS subscription for Agent Id 1 that will trigger when the
-zip code Parameter of Customer Id 9 gets Updated to any Value.
+This represents a push subscription for Agent Id 1 that will trigger when a
+customer is created in NY.
 
-We'll tell Rabbit to subscribe us to messages of the following topic:
+For example, let's assume Example 1 from the producer section is sent.
 
-    customer.9.update.zip.*
+    Send message:
 
-And from then on, Rabbit sends a message to the Notifications app when a message
-of that topic arrives.
+        { id: 10, name: "John", zip: "10027", state: "NY", agent: "3" }
+
+    With topic:
+
+        customer.10.create
+
+We'll simply call our Subscription API filter on these parameters. If there's a
+match, we'll send the notification. In this case, there is a match because of
+the state.
 
 ### Example #2:
 
@@ -100,5 +132,3 @@ of that topic arrives.
 This represents an Email subscription for Agent Id 1 that will trigger when any
 Customer's zip code is Created or Updated to Value 11027.
 
-    customer.*.create.zip.10027
-    customer.*.update.zip.10027

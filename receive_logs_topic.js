@@ -37,6 +37,7 @@ amqp.connect('amqp://localhost').then(function(conn) {
     });
 
     function process(msg) {
+      fetchSubscriptions();
       logMessage(msg);
       emailMessage(msg);
     };
@@ -72,6 +73,17 @@ amqp.connect('amqp://localhost').then(function(conn) {
        }
      );
     };
+
+    // TODO: another method, create a REST API for directly listening to queues
+    // from Rabbit, then on create, just hit the API and have a new client listening
+    function fetchSubscriptions() {
+      // If create, get all the create subscriptions.
+      // If update, get all the update subscriptions.
+      // If delete, get all the delete subscriptions.
+      // Then filter on a specific field
+      // If there, send email / notification to subscriber
+      // If not there, ignore
+    }
 
   });
 }).then(null, console.warn);
