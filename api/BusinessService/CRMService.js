@@ -2,6 +2,7 @@
 var AgentDS = require('../DataService/AgentDS'),
 	CustomerDS = require('../DataService/CustomerDS'),
 	ContactHistoryDS = require('../DataService/ContactHistoryDS'),
+	SubscriptionDS = require('../DataService/SubscriptionDS'),
 	Q = require('q');
 
 module.exports = {
@@ -160,6 +161,20 @@ module.exports = {
 		},
 		delete: function(id) {
 			return ContactHistoryDS.delete(id);
+		}
+	},
+	subscription: {
+		getAll: function() {
+			return SubscriptionDS.getAll();
+		},
+		get: function(id) {
+			return SubscriptionDS.get(id);
+		},
+		save: function(item) {
+			return SubscriptionDS.save(item);
+		},
+		delete: function(id) {
+			return SubscriptionDS.delete(id);
 		}
 	}
 };
