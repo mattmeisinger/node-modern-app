@@ -62,6 +62,12 @@ module.exports.routes = {
   'get    /api/contactHistory/:id': 'ContactHistoryController.get',
   'post   /api/contactHistory':     'ContactHistoryController.post',
   'put    /api/contactHistory/:id': 'ContactHistoryController.put',
-  'delete /api/contactHistory/:id': 'ContactHistoryController.delete'
+  'delete /api/contactHistory/:id': 'ContactHistoryController.delete',
+
+  'get    /api/subscription':     'SubscriptionController.get',
+  'get    /api/subscription/:id': 'SubscriptionController.get',
+  'post   /api/subscription':     'SubscriptionController.post',
+  'put    /api/subscription/:id': 'SubscriptionController.put',
+  'delete /api/subscription/:id': 'SubscriptionController.delete'
 
 };
