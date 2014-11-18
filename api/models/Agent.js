@@ -21,6 +21,10 @@ module.exports = {
       collection: 'customer',
       via       : 'agent'
     },
+    subscriptions: {
+      collection: 'subscription',
+      via       : 'agent'
+    },
     contactHistory: {
       collection: 'contactHistory',
       via       : 'agent'
