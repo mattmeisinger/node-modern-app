@@ -1,0 +1,39 @@
+<h3>Subscription Listing</h3>
+
+<table class='table table-hover table-condensed'>
+<thead>
+  <tr>
+    <th>Agent</th>
+    <th>Customer Id</th>
+    <th>Parameter</th>
+    <th>Value</th>
+    <th>Operation</th>
+    <th>Notification</th>
+
+    <th></th>
+    <th></th>
+  </tr>
+</thead>
+<tbody>
+  <tr ng-repeat="item in results.items">
+    <td>{{ item.agent.firstName + " " + item.agent.lastName }}</td>
+    <td>{{ item.customerId }}</td>
+    <td>{{ item.parameter }}</td>
+    <td>{{ item.value }}</td>
+    <td>{{ item.operation }}</td>
+    <td>{{ item.notification }}</td>
+
+    <td><a href="#/Subscription/{{item.id}}" class="btn btn-primary btn-sm">Edit</a></td>
+    <td><a href="" class="btn btn-danger btn-sm" ng-click="delete(item)">Delete</a></td>
+  </tr>
+</tbody>
+</table>
+
+<div style="text-align: center">
+  <a ng-show="results.meta.prevUri" href="" ng-click="setPage(page-1)">Previous</a>
+  -- Page {{page}} --
+  <a ng-show="results.meta.nextUri" href="" ng-click="setPage(page+1)">Next</a>
+</div>
+
+<a href="#/Subscription/0" class="btn btn-success btn-sm" role="button">New Subscription</a> |
+<a href="#/">Back</a>

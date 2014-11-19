@@ -36,6 +36,14 @@ crmApp.config(['$routeProvider', '$httpProvider',
 				templateUrl: 'partials/contact-history-detail.html',
 				controller: 'ContactHistoryDetailCtrl'
 			}).
+			when('/Subscription', {
+				templateUrl: 'partials/subscription-list.html',
+				controller: 'SubscriptionListCtrl'
+			}).
+			when('/Subscription/:id', {
+				templateUrl: 'partials/subscription-detail.html',
+				controller: 'SubscriptionDetailCtrl'
+			}).
 			otherwise({
 				redirectTo: '/'
 			});

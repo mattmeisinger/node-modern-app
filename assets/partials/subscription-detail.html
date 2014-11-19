@@ -1,0 +1,45 @@
+<div class="form-group">
+
+  <h2>Edit Subscription</h2>
+
+  <ul class="alert alert-error" ng-show="messages">
+    <li ng-repeat="message in messages">{{message}}</li>
+  </ul>
+
+  <div class="form-group" style="width: 400px;">
+    <label>Agent</label>
+    <select ng-options="a.id as (a.firstName + ' ' + a.lastName) for a in agents.items" ng-model="item.agentId" class="form-control"></select>
+  </div>
+
+  <div class="form-group" style="width: 400px;">
+    <label>Customer Id</label>
+    <input ng-model="item.customerId" type="text" class="form-control"/>
+  </div>
+
+  <div class="form-group" style="width: 400px;">
+    <label>Parameter</label>
+    <select ng-options="parameter for parameter in parameters" ng-model="item.parameter" class="form-control">
+    </select>
+  </div>
+
+  <div class="form-group" style="width: 400px;">
+    <label>Value</label>
+    <input ng-model="item.value" type="text" class="form-control"/>
+  </div>
+
+  <div class="form-group" style="width: 400px;">
+    <label>Operation</label>
+    <select ng-options="operation for operation in operations" ng-model="item.operation" class="form-control">
+    </select>
+  </div>
+
+  <div class="form-group" style="width: 400px;">
+    <label>Notification</label>
+    <select ng-options="notification for notification in notifications" ng-model="item.notification" class="form-control">
+    </select>
+  </div>
+
+</div>
+
+<a href="" ng-click="save(item)" class="btn btn-default">Save</a>
+<a href="#/Subscription" class="btn btn-danger">Cancel</a>
