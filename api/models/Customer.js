@@ -71,8 +71,8 @@ module.exports = {
   },
 
   afterDestroy: function(customer, next) {
-    var topic = ['customer', customer.id, 'destroy'].join('.');
-    rabbitSend(topic, customer);
+    var topic = ['customer', customer[0].id, 'destroy'].join('.');
+    this.rabbitSend(topic, customer[0]);
     next();
   },
 
