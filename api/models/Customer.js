@@ -16,6 +16,27 @@ function Customer() {
 
 util.inherits(Customer, Person);
 
+function rabbitSend(topic, record) {
+  // Serializes the object
+  var message = JSON.stringify(record);
+
+  // Connects to local instance of RabbitMQ
+  amqp.connect('amqp://localhost').then(function(conn) {
+    return when(conn.createChannel().then(function(ch) {
+      var exchangeName = 'operations';
+      var exchangeType = 'topic';
+      // Asserts that the exchange exists
+      var ok = ch.assertExchange(exchangeName, exchangeType, {durable: false});
+      return ok.then(function() {
+        // Publishes 'message' of 'topic' to 'exchangeName'
+        ch.publish(exchangeName, topic, new Buffer(message));
+        console.log(" [x] Sent to %s:'%s'", topic, message);
+        return ch.close();
+      });
+    })).ensure(function() { conn.close(); })
+  }).then(null, console.log);
+}
+
 module.exports = {
 
   attributes: {
@@ -39,42 +60,23 @@ module.exports = {
 
   afterCreate: function(customer, next) {
     var topic = ['customer', customer.id, 'create'].join('.');
-    this.rabbitSend(topic, customer);
+    rabbitSend(topic, customer);
     next();
   },
 
   afterUpdate: function(customer, next) {
     var topic = ['customer', customer.id, 'update'].join('.');
-    this.rabbitSend(topic, customer);
+    rabbitSend(topic, customer);
     next();
   },
 
   afterDestroy: function(customer, next) {
     var topic = ['customer', customer.id, 'destroy'].join('.');
-    this.rabbitSend(topic, customer);
+    rabbitSend(topic, customer);
     next();
   },
 
-  rabbitSend: function(topic, record) {
-    // Serializes the object
-    var message = JSON.stringify(record);
-
-    // Connects to local instance of RabbitMQ
-    amqp.connect('amqp://localhost').then(function(conn) {
-      return when(conn.createChannel().then(function(ch) {
-        var exchangeName = 'operations';
-        var exchangeType = 'topic';
-        // Asserts that the exchange exists
-        var ok = ch.assertExchange(exchangeName, exchangeType, {durable: false});
-        return ok.then(function() {
-          // Publishes 'message' of 'topic' to 'exchangeName'
-          ch.publish(exchangeName, topic, new Buffer(message));
-          console.log(" [x] Sent to %s:'%s'", topic, message);
-          return ch.close();
-        });
-      })).ensure(function() { conn.close(); })
-    }).then(null, console.log);
-  }
+  rabbitSend: rabbitSend
 
 };
 
