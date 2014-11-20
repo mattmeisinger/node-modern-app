@@ -70,7 +70,9 @@ module.exports = {
       lastName:  req.param('lastName'),
       email:     req.param('email'),
       phone:     req.param('phone'),
-      agent:     req.param('agentId')
+      agent:     req.param('agentId'),
+      state:     req.param('state'),
+      zip:       req.param('zip')
     };
 
     CustomerFacade.save(item)
@@ -90,7 +92,9 @@ module.exports = {
       lastName:  req.param('lastName'),
       email:     req.param('email'),
       phone:     req.param('phone'),
-      agent:     req.param('agentId')
+      agent:     req.param('agentId'),
+      state:     req.param('state'),
+      zip:       req.param('zip')
     };
 
     CustomerFacade.save(item)

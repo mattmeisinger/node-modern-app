@@ -28,6 +28,12 @@ module.exports = {
     contactHistory: {
       collection: 'contactHistory',
       via       : 'customer'
+    },
+    state: {
+      type: 'string'
+    },
+    zip: {
+      type: 'integer'
     }
   },
 

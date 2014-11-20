@@ -8,6 +8,8 @@
     <th>Email</th>
     <th>Phone</th>
     <th>Agent</th>
+    <th>State</th>
+    <th>Zip Code</th>
 
     <th></th>
     <th></th>
@@ -20,6 +22,8 @@
     <td>{{ item.email }}</td>
     <td>{{ item.phone }}</td>
     <td>{{ formatName(item.agent) }}</td>
+    <td>{{ item.state }}</td>
+    <td>{{ item.zip }}</td>
 
     <td><a href="#/Customer/{{item.id}}" class="btn btn-primary btn-sm">Edit</a></td>
     <td><a href="" class="btn btn-danger btn-sm" ng-click="delete(item)">Delete</a></td>
