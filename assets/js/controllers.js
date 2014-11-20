@@ -14,8 +14,9 @@ crmControllers.controller('AgentListCtrl', ['$scope', '$http', 'Agent',
     $scope.page = 1;
     $scope.results = Agent.getAll({page:$scope.page});
     $scope.delete = function (item) {
-      item.$delete(function () {
-        $scope.results = Agent.getAll({page:$scope.page});
+      var index = $scope.results.items.indexOf(item)
+      Agent.delete({id: item.id}, function(success) {
+        $scope.results.items.splice(index, 1);
       });
     };
     $scope.setPage = function (page) {
@@ -63,8 +64,9 @@ crmControllers.controller('SubscriptionListCtrl', ['$scope', '$http', 'Subscript
     $scope.page = 1;
     $scope.results = Subscription.getAll({page:$scope.page});
     $scope.delete = function (item) {
-      item.$delete(function () {
-        $scope.results = Subscription.getAll({page:$scope.page});
+      var index = $scope.results.items.indexOf(item)
+      Subscription.delete({id: item.id}, function(success) {
+        $scope.results.items.splice(index, 1);
       });
     };
     $scope.setPage = function (page) {
@@ -117,8 +119,9 @@ crmControllers.controller('CustomerListCtrl', ['$scope', '$http', 'Customer',
     $scope.page = 1;
     $scope.results = Customer.getAll({page:$scope.page});
     $scope.delete = function (item) {
-      item.$delete(function () {
-        $scope.results = Customer.getAll({page:$scope.page});
+      var index = $scope.results.items.indexOf(item)
+      Customer.delete({id: item.id}, function(success) {
+        $scope.results.items.splice(index, 1);
       });
     };
     $scope.setPage = function (page) {
@@ -170,8 +173,9 @@ crmControllers.controller('ContactHistoryListCtrl', ['$scope', '$http', 'Contact
     $scope.page = 1;
     $scope.results = ContactHistory.getAll({page:$scope.page});
     $scope.delete = function (item) {
-      item.$delete(function () {
-        $scope.results = ContactHistory.getAll({page:$scope.page});
+      var index = $scope.results.items.indexOf(item)
+      ContactHistory.delete({id: item.id}, function(success) {
+        $scope.results.items.splice(index, 1);
       });
     };
     $scope.setPage = function (page) {
