@@ -14,7 +14,7 @@ module.exports = {
     value       : { type: 'string' },
     operation   : {
       type: 'string',
-      enum: ['create', 'update', 'destroy']
+      enum: ['all', 'create', 'update', 'destroy']
     },
     notification : {
       type: 'string',

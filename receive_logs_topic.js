@@ -64,7 +64,7 @@ amqp.connect('amqp://localhost').then(function(conn) {
           var routingKey = msg.fields.routingKey;
           var operation = routingKey.split('.')[2];
           var agents = _.chain(subscriptions)
-            .filter(function(s) { return operation == s.operation ; })
+            .filter(function(s) { return s.operation == "all" ? true : operation == s.operation ; })
             .filter(function(s) {
               if (s.parameter != undefined && s.parameter != "all") {
                 var parameter = s.parameter;
