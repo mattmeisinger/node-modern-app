@@ -91,7 +91,7 @@ topic      | description
 -----------|----------------------------
  entity    | customer or agent
  id        | id of the entity
- operation | create, update, delete
+ operation | create, update, destroy
 
 #### Examples
 ##### Example 1: A Customer (with Id 10) in Zip 10027 is created
@@ -116,7 +116,7 @@ With topic:
 
 Notice that in this case we only send the parameter(s) that was updated.
 
-##### Example 3: Customer 5 is deleted from the system
+##### Example 3: Customer 5 is destroyed from the system
 
 Send message:
 
@@ -124,7 +124,7 @@ Send message:
 
 With topic:
 
-    customer.5.delete
+    customer.5.destroy
 
 ### Consumer side
 To simplify the consumer process, we'll listen for all messages that get posted
