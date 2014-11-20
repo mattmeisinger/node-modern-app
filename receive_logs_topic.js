@@ -82,8 +82,7 @@ amqp.connect('amqp://localhost').then(function(conn) {
             console.log("Sending email to " + agent.firstName + " " + agent.lastName);
             return agent.email;
           });
-
-          emailMessage(msg, recipients);
+          if (recipients.length > 0) emailMessage(msg, recipients);
         });
       });
     }
@@ -108,8 +107,7 @@ amqp.connect('amqp://localhost').then(function(conn) {
 
       ses.sendEmail(email, function(err, data) {
           if(err) throw err;
-          console.log('Email sent:');
-          console.log(data);
+          console.log('Email sent!');
        }
      );
     };
