@@ -1,14 +1,16 @@
 #!/usr/bin/env node
 
-var amqp = require('amqplib');
+var amqp     = require('amqplib');
 var basename = require('path').basename;
-var all = require('when').all;
-var aws = require('aws-sdk');
+var all      = require('when').all;
+var aws      = require('aws-sdk');
+var http     = require('http');
+var _        = require('underscore');
 
 var keys = process.argv.slice(2);
+
 if (keys.length < 1) {
-  console.log('Usage: %s pattern [pattern...]',
-              basename(process.argv[1]));
+  console.log('Usage: %s pattern [pattern...]', basename(process.argv[1]));
   process.exit(1);
 }
 
@@ -32,32 +34,70 @@ amqp.connect('amqp://localhost').then(function(conn) {
     ok = ok.then(function(queue) {
       return ch.consume(queue, process, {noAck: true});
     });
+
     return ok.then(function() {
       console.log(' [*] Waiting for logs. To exit press CTRL+C.');
     });
 
     function process(msg) {
-      fetchSubscriptions();
+      fetchSubscriptions(msg);
       logMessage(msg);
-      emailMessage(msg);
     };
 
-    function logMessage(msg) {
-      console.log(" [x] %s:'%s'", msg.fields.routingKey, msg.content.toString());
-    };
+    function fetchSubscriptions(msg) {
+      var options = {
+        host: 'localhost',
+        port: 1337,
+        path: '/api/subscription'
+      };
 
-    function emailMessage(msg) {
+      http.get(options, function(response) {
+        var body = '';
+        response.on('data', function(d) {
+            body += d;
+        });
+        response.on('end', function() {
+          var data = JSON.parse(body);
+          var subscriptions = data.items;
+          var action = JSON.parse(msg.content);
+          // Check subscriptions and match against message
+          var routingKey = msg.fields.routingKey;
+          var operation = routingKey.split('.')[2];
+          var agents = _.chain(subscriptions)
+            .filter(function(s) { return operation == s.operation ; })
+            .filter(function(s) {
+              if (s.parameter != undefined && s.parameter != "all") {
+                var parameter = s.parameter;
+                if (s.value != undefined && s.value != "all") {
+                  var value = s.value;
+                  return value == action[parameter];
+                }
+                return true;
+              }
+            })
+            .map(function(s) { return s.agent; })
+            .value();
+
+          var recipients = _.map(agents, function(agent) {
+            console.log("Sending email to " + agent.firstName + " " + agent.lastName);
+            return agent.email;
+          });
+
+          emailMessage(msg, recipients);
+        });
+      });
+    }
+
+      function emailMessage(msg, recipients) {
       aws.config.loadFromPath('aws.credentials.json');
       var ses = new aws.SES();
 
-      // Could be a list
-      var to = ['johan.menac@gmail.com'];
       // this must relate to a verified SES account
       var from = 'johan.menac@gmail.com';
 
       var email = {
         Source: from,
-        Destination: { ToAddresses: to },
+        Destination: { ToAddresses: recipients},
         Message: {
           Subject: { Data: msg.fields.routingKey },
           Body: {
@@ -74,16 +114,8 @@ amqp.connect('amqp://localhost').then(function(conn) {
      );
     };
 
-    // TODO: another method, create a REST API for directly listening to queues
-    // from Rabbit, then on create, just hit the API and have a new client listening
-    function fetchSubscriptions() {
-      // If create, get all the create subscriptions.
-      // If update, get all the update subscriptions.
-      // If delete, get all the delete subscriptions.
-      // Then filter on a specific field
-      // If there, send email / notification to subscriber
-      // If not there, ignore
-    }
-
+    function logMessage(msg) {
+      console.log(" [x] %s:'%s'", msg.fields.routingKey, msg.content.toString());
+    };
   });
 }).then(null, console.warn);
