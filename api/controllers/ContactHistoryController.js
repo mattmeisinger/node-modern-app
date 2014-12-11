@@ -34,6 +34,9 @@ module.exports = {
       var page = parseInt(req.param('page') || 1);
       ContactHistoryFacade.getAll()
         .then(function(items) {
+          return QueryFilter.filterContactHistory(items, req.param('$filter'));
+        })
+        .then(function(items) {
           // If no page is specified, return entire list of items
           if (!req.param('page')) {
             res.json({items: items});
