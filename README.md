@@ -41,6 +41,54 @@ Get second page of agents:
 
 	curl -i -H "Accept: application/json" -H "Nonce: 1248djdd941121" -H "Content-Type: application/json" -X GET http://localhost:1337/api/agent?page=2
 
+Get list of agents with first name 'Jon':
+
+    curl -i -H "Accept: application/json" -H "Nonce: 1248djdd941121" -H "Content-Type: application/json" -X GET http://localhost:1337/api/agent?$filter=firstName+eq+Jon
+
+### Filtering options
+In the last REST API Request Example above, you can see we can provide a $filter parameter to the api.  The $filter parameter restricts the results returned by the REST endpoint.
+
+Our syntax is a subset of odata.org's conventions for filter query options: http://www.odata.org/documentation/odata-version-2-0/uri-conventions/#FilterSystemQueryOption
+
+If the $filter parameter is invalid, we will treat the query as if the $filter was not included at all.
+
+The $filter parameter must have 3 values, separated by '+'.
+
+ 1. The first value must be a valid property to filter on.  You can see a complete list of valid properties for Agents, Customers, and ContactHistory below.
+ 2. The second value must be a valid comparator.  You can see a complete list of valid comparators below.  Comparators are case insensitive, meaning 'eq' is the same as 'EQ'.
+ 3. The third value is what the property will be compared against.
+
+### Valid Filter Properties
+
+#### Agents
+ * firstName
+ * lastName
+ * email
+ * phone
+ * state
+
+#### Customers
+ * firstName
+ * lastName
+ * email
+ * phone
+ * state
+ * zip
+
+#### Contact History
+ * data
+ * model
+ * summary
+
+### Valid Filter Comparators
+ * eq - Equal
+ * ne - Not Equal
+ * lt - Less Than
+ * gt - Greater Than
+ * le - Less Than Or Equal
+ * ge - Greater Than Or Equal
+
+
 ## Subscriptions
 
 For this part of the assignment we're using RabbitMQ's Topics model. It works

@@ -9,10 +9,10 @@ crmControllers.run(['$rootScope', function($rootScope) {
     };
   }]);
 
-crmControllers.controller('AgentListCtrl', ['$scope', '$http', 'Agent',
-  function ($scope, $http, Agent) {
+crmControllers.controller('AgentListCtrl', ['$scope', '$routeParams', '$http', 'Agent',
+  function ($scope, $routeParams, $http, Agent) {
     $scope.page = 1;
-    $scope.results = Agent.getAll({page:$scope.page});
+    $scope.results = Agent.getAll({ page: $scope.page, $filter: $routeParams.$filter });
     $scope.delete = function (item) {
       var index = $scope.results.items.indexOf(item)
       Agent.delete({id: item.id}, function(success) {
@@ -114,10 +114,10 @@ crmControllers.controller('SubscriptionDetailCtrl', ['$scope', '$routeParams', '
     };
   }]);
 
-crmControllers.controller('CustomerListCtrl', ['$scope', '$http', 'Customer',
-  function ($scope, $http, Customer) {
+crmControllers.controller('CustomerListCtrl', ['$scope', '$routeParams', '$http', 'Customer',
+  function ($scope, $routeParams, $http, Customer) {
     $scope.page = 1;
-    $scope.results = Customer.getAll({page:$scope.page});
+    $scope.results = Customer.getAll({ page: $scope.page, $filter: $routeParams.$filter });
     $scope.delete = function (item) {
       var index = $scope.results.items.indexOf(item)
       Customer.delete({id: item.id}, function(success) {
@@ -168,10 +168,10 @@ crmControllers.controller('CustomerDetailCtrl', ['$scope', '$routeParams', '$loc
     };
   }]);
 
-crmControllers.controller('ContactHistoryListCtrl', ['$scope', '$http', 'ContactHistory',
-  function ($scope, $http, ContactHistory) {
+crmControllers.controller('ContactHistoryListCtrl', ['$scope', '$routeParams', '$http', 'ContactHistory',
+  function ($scope, $routeParams, $http, ContactHistory) {
     $scope.page = 1;
-    $scope.results = ContactHistory.getAll({page:$scope.page});
+    $scope.results = ContactHistory.getAll({ page: $scope.page, $filter: $routeParams.$filter });
     $scope.delete = function (item) {
       var index = $scope.results.items.indexOf(item)
       ContactHistory.delete({id: item.id}, function(success) {
